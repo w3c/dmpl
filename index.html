@@ -1,50 +1,800 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset='utf-8'>
     <title>Dialogue Manager Programming Language (DMPL)</title>
-    <script 
-      src='https://www.w3.org/Tools/respec/respec-w3c-common' 
-      class='remove'></script>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script
+            src='https://www.w3.org/Tools/respec/respec-w3c-common'
+            class='remove'></script>
     <script class='remove'>
-      var respecConfig = {
-        specStatus: "CG-DRAFT",
-        subtitle: "Syntax and semantics to represent interactive experiences on the web",
-        editors: [{
-          name: "Nishant Shukla"
-        }],
-        authors: [{
-          name: "Nelson Solano"
-        }],
-        wg: "Conversational Interfaces Community Group",
-        wgURI: "https://www.w3.org/community/conv/",
-        wgPublicList: "public-conv",
-        edDraftURI: "https://w3c.github.io/dmpl",
-        shortName: "dmpl"
-      };
+        let respecConfig = {
+            wg: "Conversational Interfaces Working Group",
+            specStatus: "CG-DRAFT",
+            editors: [{
+                name: "Nishant Shukla",
+                url: "http://shukla.io/",
+            }],
+            authors: [{
+                name: "Nelson Solano",
+            }, {
+                name: "Victor Zhang"
+            }],
+            edDraftURI: "https://github.com/w3c/dmpl",
+            otherLinks: [{
+                key: "Conversational Interfaces",
+                data: [{
+                    value: "Conversational Interfaces Working Group",
+                    href: "https://www.w3.org/community/conv/"}],
+            }],
+            addSectionLinks: true
+        };
     </script>
-  </head>
-  <body>
-    <section id='abstract'>
-      <p>
+</head>
+<body>
+
+<section id='abstract'>
+    <p>
+        This specification defines the working draft of DMPL (v0.3).
+
+        DMPL defines the behavior of interactive systems in a formal language. The user of the language specifies the
+        states, how they change (i.e. action space), and which are preferred (i.e. utility). These three components
+        characterize a task, so we may call DMPL a tas-oriented programming language. The compiler of the language
+        resolves the task by identifying and executing the actions defined in the action space.
+    </p>
+</section>
+<section id='sotd'>
+    <p>
         This is required.
-      </p>
+    </p>
+</section>
+<section data-dfn-for="Foo">
+    <h2><code>Introduction</code></h2>
+    <section>
+        <h2><code>Scope</code></h2>
+        <i>This section is informative.</i>
+        <p>
+            This document is limited to specifying the semantics for a general purpose <b>task-oriented</b> language for
+            interactive agents. This document is targeted at applications that would be expected to be used by content
+            authors on a frequent basis. One example application of DMPL is an Authoring Tool to be used on a regular
+            basis.
+        </p>
     </section>
-    <section id='sotd'>
-      <p>
-        This is required.
-      </p>
+    <section>
+        <h2><code>Goals and Motivation</code></h2>
+        <i>This section is informative.</i>
+        <p>
+            We compare DMPL against other languages by extending <a href="https://bit.ly/2Huf6fG">Microsoft's Function
+            Programming vs. Imperative Programming</a> table, shown below.
+        </p>
+        <table id="comparison-table">
+            <tr>
+                <th></th>
+                <th>Imperative</th>
+                <th>Functional</th>
+                <th>Task-Oriented</th>
+            </tr>
+            <tr>
+                <th>Programmer Focus</th>
+                <td>How to perform tasks(algorithms) and how to track changes in state.</td>
+                <td>What information is desired and what transformations are required.</td>
+                <td>Why an action is taken and how information changes.</td>
+            </tr>
+            <tr>
+                <th>State Changes</th>
+                <td>Important</td>
+                <td>Non-existant(for purely functional languages).</td>
+                <td>Important</td>
+            </tr>
+            <tr>
+                <th>Order of Execution</th>
+                <td>Programmer is mostly responsible.</td>
+                <td>Hybrid resposibility.</td>
+                <td>Compiler is mostly responsible.</td>
+            </tr>
+            <tr>
+                <th>Loops</th>
+                <td>For/While, Recursion</td>
+                <td>Recursion</td>
+                <td>None, loops are implicit.</td>
+            </tr>
+            <tr>
+                <th>Primary Manipulation Unit</th>
+                <td>Instances of structures or classes</td>
+                <td>Functions</td>
+                <td>Utility</td>
+            </tr>
+        </table>
     </section>
-    <section data-dfn-for="Foo">
-      <h2>Start your spec!</h2>
-      <pre class="idl">
-	interface Foo {
-        attribute Bar bar;
-        void doTheFoo();
-	};
-      </pre>
-      <p>The <dfn>Foo</dfn> interface represents a Foo.</p>
-      <p>The <dfn>doTheFoo()</dfn> method does the foo.</p>
+</section>
+<section>
+    <h2><code>Primitive Datatype's and JSON Language Syntax</code></h2>
+    <i>This section is normative.</i>
+    <p>
+        This section of the document defines the types used within this specification using <a href="">
+        EBNF</a> notation with corresponding <a href="https://bit.ly/2Tk2EVX">railroad diagrams</a>.
+    </p>
+    <section>
+        <h2><code><dfn data-dfn-type="dfn" id="literals">Literals</dfn></code></h2>
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="literal">literal</dfn></code></h2>
+            <p>
+                A <b>literal</b> is a terminal atom that may be assigned to a variable or used as an operand to build
+                an expression.
+            </p>
+            <figure id="literal-railroad">
+                <img src="diagrams/literal.png" alt="">
+                <figcaption>. Literal railroad diagram.
+                    <pre>
+                        literal :: = string | number | boolean | 'null'
+                    </pre>
+                </figcaption>
+            </figure>
+
+        </section>
+
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="boolean">boolean</dfn></code></h2>
+            <p>
+                A <b>boolean</b> may take on literal values <b>'true'</b> or <b>'false'</b>.
+            </p>
+            <figure id="boolean-railroad">
+                <img src="diagrams/boolean.png" alt="">
+                <figcaption>. Boolean railroad diagram.
+                    <pre>
+                        boolean :: = 'true' | 'false'
+                    </pre>
+                </figcaption>
+            </figure>
+        </section>
+
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="name">name</dfn></code></h2>
+            <p>
+                A <b>name</b> is a sequence of characters conforming to those inthe XML standard.
+            </p>
+            <figure id="name-railroad">
+                <img src="diagrams/name.png" alt="">
+                <figcaption>. Name railroad diagram.
+                    <pre>
+                        name :: = [ http://www.w3.org/TR/xml-names/#NT-NCName ]
+                    </pre>
+                </figcaption>
+            </figure>
+        </section>
+
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="qt_start">qt_start</dfn></code></h2>
+            <p>
+                A <b>qt_start</b> is the starting quotation mark indicates the beginning of a string.
+            </p>
+            <figure id="qt-start-railroad">
+                <img src="diagrams/qt_start.png" alt="">
+                <figcaption>. qt_start railroad diagram.
+                    <pre>
+                        qt_start :: = '"' '`'
+                    </pre>
+                </figcaption>
+            </figure>
+        </section>
+
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="qt_close">qt_close</dfn></code></h2>
+            <p>
+                A <b>qt_close</b> is the ending quotation mark indicates the termination of a string.
+            </p>
+            <figure id="qt-close-railroad">
+                <img src="diagrams/qt_close.png" alt="">
+                <figcaption>. qt_close railroad diagram.
+                    <pre>
+                        qt_close :: = '`' '"'
+                    </pre>
+                </figcaption>
+            </figure>
+        </section>
+
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="string">string</dfn></code></h2>
+            <p>
+                A <b>string</b> literal represents a finite sequence of characters. It is surrounded by starting and ending quotation marks.
+            </p>
+            <figure id="string-railroad">
+                <img src="diagrams/string.png" alt="">
+                <figcaption>. String railroad diagram.
+                    <pre>
+                        string :: = qt_start name qt_close
+                    </pre>
+                </figcaption>
+            </figure>
+        </section>
+
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="digit">digit</dfn></code></h2>
+            <p>
+                A <b>digit</b> represents a real valued integer in the range [0-9].
+            </p>
+            <figure id="Digit railroad diagram.">
+                <img src="diagrams/digit.png" alt="">
+                <figcaption>. Digit railroad diagram.
+                    <pre>
+                        digit ::= [0-9]
+                    </pre>
+                </figcaption>
+            </figure>
+        </section>
+
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="number">number</dfn></code></h2>
+            <p>
+                A <b>number</b> literal may represent either a positive or negative decimal value.
+            </p>
+            <figure id="number-railroad">
+                <img src="diagrams/number.png" alt="">
+                <figcaption>. Number railroad diagram.
+                    <pre>
+                        num ::= '-'? ( digit+ ( '.' digit* )? | '.' digit+ )
+                    </pre>
+                </figcaption>
+            </figure>
+        </section>
     </section>
-  </body>
+
+    <section>
+        <h2><code><dfn data-dfn-type="dfn" id="variables">Variables</dfn></code></h2>
+        <p>
+            Persistent memory is called a <b>fluent-state</b>, which is a mapping of names to values. A fluent state may
+            be accessed or modified in code. Fluent values may be <a class="internalDFN" href="#literals" data-link-type="dfn">literals</a><br>
+            or other more complicated structures.
+        </p>
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="variable">variable</dfn></code></h2>
+            <p>
+                A <b>variable</b> is a named reference to a fluent's value.
+            </p>
+            <figure id="variable-railroad">
+                <img src="diagrams/variable.png" alt="">
+                <figcaption>. Variable railroad diagram.
+                    <pre>
+                        variable :: = '"' name '"'
+                    </pre>
+                </figcaption>
+            </figure>
+        </section>
+    </section>
+
+    <section>
+        <h2><code><dfn data-dfn-type="dfn" id="dictionaries">Dictionaries</dfn></code></h2>
+        <p>
+            A <b>dictionary</b> is structure maps data in key-value pairs. The keys and values are all evaluated.
+        </p>
+        <figure id="dictionary-railroad">
+            <img src="diagrams/dictionary.png" alt="">
+            <figcaption>. Dictionary railroad diagram.
+                <pre>
+                        dictionary : : = '{' ( string | variable ) ':' expression ( ',' ( string | variable ) ':' expression )* '}'
+                </pre>
+            </figcaption>
+        </figure>
+    </section>
+
+    <section>
+        <h2><code><dfn data-dfn-type="dfn" id="expressions">Expressions</dfn></code></h2>
+        <section>
+            <h2><code>Expression</code></h2>
+            <p>
+                An <b></b> may be evaluated, and that result is stored in memory to be referenced later.
+            </p>
+        </section>
+        <table id="expression-table">
+            <tr>
+                <th>Return Type</th>
+                <th>Operation Symbol</th>
+                <th>Example</th>
+                <th>Task-Definition</th>
+            </tr>
+            <tr>
+                <th>String</th>
+                <td><pre>"++"</pre></td>
+                <td><pre>["++", "`hello`", "` `", "`world`"]</pre></td>
+                <td><pre>foldl1 (++) args</pre><a href="https://bit.ly/2F6CoW6">Try online.</a></td>
+            </tr>
+            <tr>
+                <th>Number</th>
+                <td><pre>"+"</pre></td>
+                <td><pre>["+", 1, 2, 3, 4]</pre></td>
+                <td><pre>foldl1 (+) args</pre><a href="https://bit.ly/2F6CoW6">Try online.</a></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><pre>"-"</pre></td>
+                <td><pre>["-", 5, 3]</pre></td>
+                <td><pre>foldl1 (-) args</pre></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><pre>"*"</pre></td>
+                <td><pre>["*", 2, 4]</pre></td>
+                <td><pre>foldl1 (*) args</pre></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><pre>"/"</pre></td>
+                <td><pre>["/", 1, 2]</pre></td>
+                <td><pre>foldl1 (/) args</pre></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><pre>"%"</pre></td>
+                <td><pre>["%", 168, 2]</pre></td>
+                <td><pre>(args !! 0) `mod` (args !! 1)</pre></td>
+            </tr>
+            <tr>
+                <th>boolean</th>
+                <td><pre>"=="</pre></td>
+                <td><pre>["==", 1, 1, 1, 2]</pre></td>
+                <td><pre>all (head args ==) (tail args)</pre></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><pre>"!+"</pre></td>
+                <td><pre>["!=", 1, 2]</pre></td>
+                <td><pre>
+                    op args = allUnique args
+                        where allUnique = all ( (==) 1 . length) . sg
+                            sg        = group . sort</pre></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><pre>">"</pre></td>
+                <td><pre>[">", 2, 3]</pre></td>
+                <td><pre>(args !! 0) > (args !! 1)</pre></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><pre>">="</pre></td>
+                <td><pre>[">=", 2, 3]</pre></td>
+                <td><pre>(args !! 0) >= (args !! 1)</pre></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><pre>"<"</pre></td>
+                <td><pre>["<", 2, 3]</pre></td>
+                <td><pre>(args !! 0) < (args !! 1)</pre></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><pre>"<="</pre></td>
+                <td><pre>["<=", 2, 3]</pre></td>
+                <td><pre>(args !! 0) <= (args !! 1)</pre></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><pre>"&&"</pre></td>
+                <td><pre>["&&", true, true, false]</pre></td>
+                <td><pre>foldl1 (&&) args</pre></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><pre>"||"</pre></td>
+                <td><pre>["||", true, true, false]</pre></td>
+                <td><pre>foldl1 (||) args</pre></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><pre>"in"</pre></td>
+                <td><pre>["in", 3, [1, 2, 3]]</pre></td>
+                <td><pre>elem (fst args) (snd args)</pre></td>
+            </tr>
+
+
+            <tr>
+                <th>Loops</th>
+                <td>For/While, Recursion</td>
+                <td>Recursion</td>
+                <td>None, loops are implicit.</td>
+            </tr>
+            <tr>
+                <th>Primary Manipulation Unit</th>
+                <td>Instances of structures or classes</td>
+                <td>Functions</td>
+                <td>Utility</td>
+            </tr>
+        </table>
+    </section>
+
+    <section>
+        <h2><code><dfn data-dfn-type="dfn" id="statements">Statements</dfn></code></h2>
+        <section>
+            <h2><code>Statement</code></h2>
+            <p>
+                A <b>statement</b> may be one of three possible types: <b>effect</b>, <b>do</b>, or <b>fork</b>.
+                Optionally, statements may contain <b>condition</b>, <b>await</b>, or <b>once</b> arguments.
+            </p>
+        </section>
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="condition">Condition</dfn></code></h2>
+            <p>
+                A <b>condition</b> is a boolean expression that runs the statement if the expression evaluates to true.
+                A condition check takes priority over other parts of the statement.
+            </p>
+        </section>
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="once">Once</dfn></code></h2>
+            <p>
+                A <b>once</b> flag specified whether the statement can only be run once. By default, the once flag is set to
+                false.
+            </p>
+        </section>
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="effect">Effect</dfn></code></h2>
+            <p>
+                An <b>effect</b> is a terminal node, meaning it does not produce more statements. There are 6 types of effects.
+            </p>
+        </section>
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="act">Act</dfn></code></h2>
+            <p>
+                An <b>act</b> represents an action specified by evaluating the expression. The result is interpreted by a client (see DMPL Act Messages).
+            </p>
+        </section>
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="set">Set</dfn></code></h2>
+            <p>
+                A <b>set</b> updates the value of the variable, where the name of the variable is specified by evaluating the expression.
+            </p>
+        </section>
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="def">Def</dfn></code></h2>
+            <p>
+                A <b>def</b> defines a new expression that can be used later in the code.
+            </p>
+        </section>
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="run">Run</dfn></code></h2>
+            <p>
+                A <b>run</b> calls DMPL code in another file, optionally passing in arguments. The current fluents are stored on the stack.
+            </p>
+        </section>
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="use">Use</dfn></code></h2>
+            <p>
+                A <b>use</b> calls DMPL code in another file, optionally passing in variables names. It's similar to "from os import path" notation in Python.
+            </p>
+        </section>
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="pop">Pop</dfn></code></h2>
+            <p>
+                A <b>pop</b> quits execution on the current DMPL code, pops the fluent-state from the stack, and resumes execution from the previous run location.
+            </p>
+        </section>
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="do">Do</dfn></code></h2>
+            <p>
+                A <b>do</b> statement specifies a list of statements to be executed.
+            </p>
+        </section>
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="fork">Fork</dfn></code></h2>
+            <p>
+                A <b>fork</b> statement is used in conjunction with an if statement. Forks specify the branch-like behavior of the list of statements that follow.
+            </p>
+        </section>
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="scheme">Scheme</dfn></code></h2>
+            <p>
+                A <b>scheme</b> is associated with a fork statement, and it describes the fork strategy.
+            </p>
+        </section>
+        <section>
+            <h2><code><dfn data-dfn-type="dfn" id="depth">Depth</dfn></code></h2>
+            <p>
+                Specifies the number of steps to look ahead using the respective search policy.
+            </p>
+        </section>
+    </section>
+</section>
+<section>
+    <h2><code>Examples</code></h2>
+    <i>This section is informative.</i>
+    <p>
+        This section details DMPL conforming example programs.
+    </p>
+    <b>Hello World!</b>
+    <pre>
+        {
+          "@act": "`hello world`"
+        }
+
+        {
+          "@act": {"version": "1", "id": "1", "interrupt": false, "block": [
+            {"id": "1", "object": "goose", "action": "say" "delay": 0, "params": {"intent": "greeting", "handle": "...", "utterance": "hello world"}}
+          ]}
+        }
+    </pre>
+    <b>"Do" Statement</b>
+    <pre>
+        {
+          "@do": [
+            {"@act": "`hello`"},
+            {"@act": "`world`"}
+          ]
+        }
+    </pre>
+    <b>If-Else Control Flow</b>
+    <pre>
+        {
+          "@fork": [
+            {"if": ["==", ["+", 2, 2], 4], "@act": "`this statement is run`"},
+            {"@act": "`never reached`"}
+          ]
+        }
+    </pre>
+    <b>Variables</b>
+    <pre>
+        {
+          "@fork": [
+            {"if": ["?", "`x`"], "@set": "`x`", "val": 0},
+            {"@do": [
+              {"@set": "`x`", "val": ["+", 1, "x"]},
+              {"@act": "x"}
+            ]}
+          ]
+        }
+    </pre>
+    <b>Define New Expression</b>
+    <pre>
+        {
+          "@do": [
+            {"@def": ["", "`inc`", "`x`"], "val": {"@return": ["+", 1, "x"]}},
+            {"@act", ["`inc`", 5]}
+          ]
+        }
+    </pre>
+    <b>Unpacking an Array</b>
+    <pre>
+        {
+          "@do": [
+            {"@set": "`content`", "val": ["", "`What's the biggest planet?`", "`Jupiter`"]},
+            {"@set": ["", "`Prompt`", "`Correct-Answer`"], "val": "`content`"}
+          ]
+        }
+    </pre>
+    <b>Running Components</b>
+    <pre>
+        {"@do":
+          {"@run": "`Question`", "args": ["", "`What's the biggest planet?`", "`Jupiter`"]},
+          {"await": ["return"], "@fork": [
+            {"if": ["return", true], "@set": "`score`", "val": 100},
+            {"@set": "`score`", "val": 0}
+          ]}
+        }
+    </pre>
+    <b>Importing Expressions</b>
+    <pre>
+        {
+          "@do": [
+            {"@use": "`MathExpressions`", "import": ["", "`square`", "`exp`"]},
+            {"@act": ["==", ["`square`", 6], ["`exp`", 6, 2]]}
+          ]
+        }
+    </pre>
+    <b>Input Handling</b>
+    <pre>
+        {
+          "@do": [
+            {"@act": "`are you ready?`"},
+            {"await": ["input"], "@fork": [
+              {"if": ["input", "`yes`"], "@act": "`great`"},
+              {"if": ["input", "`no`"], "@act": "`no problem`"}
+            ]}
+          ]
+        }
+    </pre>
+    <b>Greet and Ask Question</b>
+    <pre>
+        {
+          "scheme": {"depth":  2}, "@fork": [
+            {"if": ["?", "`greeted`"], "@set": "`greeted`", "val": false},
+            {"if": ["==", "greeted", false], "@do": [
+              {"@act": "`hello`"},
+              {"@set": "`greeted`", "val": true}
+            ]},
+            {"if": ["==", "greeted", true], "@do": [
+              {"@act": "`how are you?`"},
+              {"@set": "`asked_feelings`", "val": true},
+              {"await": ["input"], "@fork": [
+                {"if": ["input", "`good`"], "@act": "`great`"}
+              ]}
+            ]}
+          ]
+        }
+    </pre>
+    <b>Planet Trivia</b>
+    <pre>
+        {
+          "@fork": [
+            {"@do": [
+              {"@set": "`Init`", "val": true},
+              {"@set": "`Wrong-Counter`", "val": 0},
+              {"@set": "`Is-Hint1-Given`", "val": false},
+              {"@set": "`Is-Hint2-Given`", "val": false},
+              {"@set": "`Is-Answer-Given`", "val": false},
+              {"@set": "`Num-Hints-Given`", "val": 0},
+              {"@set": "`Question`", "val": "`What's the biggest planet?`"},
+              {"@set": "`CA`", "val": "`planet.jupiter`"},
+              {"@set": "`CA-Response`", "val": "`Exactly!`"},
+              {"@set": "`WA1`", "val": "`planet`"},
+              {"@set": "`WA1-Response`", "val": "`Nope. That's not the biggest`"},
+              {"@set": "`WA2`", "val": "`nonplanet`"},
+              {"@set": "`WA2-Response`", "val": "`That's not a planet`"},
+              {"@set": "`Hint1`", "val": "`It has a big red spot`"},
+              {"@set": "`Hint2`", "val": "`It's name begins with the letter J`"},
+              {"@set": "`Answer`", "val": "`The biggest planet is Jupiter`"},
+              {"@set": "`Hint-Announcement`", "val": "`Here's a hint`"}
+            ], "if": ["?", "`Init`"]},
+            {"@fork": [
+              {"@do": [
+                {"@act": "Question"},
+                {"@fork": [
+                  {"if": ["act", "CA"], "@do": [
+                    {"@act": "CA-Response"},
+                    {"@set": "`Is-Answer-Given`", "val": true}
+                  ]},
+                  {"if": ["act", "WA1"], "@do": [
+                    {"@act": "WA1-Response"},
+                    {"@set": "`Wrong-Counter`", "val":  ["+", 1, "Wrong-Counter"]}
+                  ]},
+                  {"if": ["act", "WA2"], "@do": [
+                    {"@act": "WA2-Response"},
+                    {"@set": "`Wrong-Counter`", "val":  ["+", 1, "Wrong-Counter"]}
+                  ]},
+                  {"@do": [
+                    {"@set": "`Wrong-Counter`", "val":  ["+", 1, "Wrong-Counter"]}
+                  ]}
+                ], "await": ["act"]}
+              ], "if": ["&&", ["<=", "Wrong-Counter", 3], ["!", "Is-Answer-Given"]]},
+              {"@do": [
+                {"@act": "Hint-Announcement"},
+                {"@act": "Hint1"},
+                {"@set": "`Is-Hint1-Given`", "val": true}
+              ], "if": ["&&", ["!", "Is-Hint1-Given"], ["==", "Wrong-Counter", 1]]},
+              {"@do": [
+                {"@act": "Hint-Announcement"},
+                {"@act": "Hint2"},
+                {"@set": "`Is-Hint2-Given`", "val": true}
+              ], "if": ["&&", ["!", "Is-Hint2-Given"], ["==", "Wrong-Counter", 2]]},
+              {"@do": [
+                {"@act": "Answer"},
+                {"@set": "`Is-Answer-Given`", "val": true}
+              ], "if": ["&&", ["!", "Is-Answer-Given"], ["==", "Wrong-Counter", 3]]}
+            ], "scheme": {"depth": 3}}
+          ]
+        }
+    </pre>
+</section>
+<section>
+    <h2><code>References</code></h2>
+    <i>This section is informative.</i>
+
+    <p>
+        The primitive data types used and defined within this spec were influenced by <a href="https://bit.ly/2H35fx3">
+        ISO/IEC 11404.</a> The conforming DMPL JSON syntax was influenced by <a href="http://json.org/">json.org</a> and
+        <a href="https://jsonapi.org/">jsonapi.org</a>. The JSON Syntax defined within this document was developed
+        using <a href="https://bit.ly/2IWdz3b">EBNF</a>. The railroad diagrams were genereated using
+        <a href="https://bit.ly/2Tk2EVX">raildroad diagram generator.</a>
+    </p>
+</section>
+<section>
+    <h2><code>Conformances</code></h2>
+    <p>
+        As well as sections marked as non-normative, all authoring guidelines, diagrams, examples in this specification
+        are non-normative. Everything else within this specification is normative. This specification uses the key words
+        "MUST", "MUST NOT", "REQUIRED", "SHALL, "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and
+        "OPTIONAL" are to be interpreted as described in <a href="https://www.ietf.org/">Key words to use in RFCs to Indicate Requirement Levels
+        [RFC2119]</a>. For readability purposes, the aforementioned key words do not appear in all uppercase within this
+        specification. An authoring-tool, constraint problem solver, and robot controller is DMPL conforming if the used
+        expressions are valid DMPL expressions that may evaluate to binary values such as "True", or "False". A DMPL
+        file is conforming if it adheres to the JSON language syntax defined within this document. An interpreter is
+        conforming if it rejects non-conforming DMPL files, and accepts conforming DMPL files.
+    </p>
+</section>
+<section>
+    <h2><code>Related Technologies</code></h2>
+    <i>This section is informative.</i>
+    <section>
+        <h2>Planning Domain Definition Language(PDDL)</h2>
+        <p>
+            PDDL decouples the action-space(domain description) from the fluent space(problem description), just like
+            DMPL.
+        </p>
+        However, PDDL v3.1(the latest version) incurs the following limitations:
+        <ul>
+            <li>The definition of a goal in PDDL is restricted to first-order predicate logic. DMPL  instead
+                defines fluents by pair-wise preferences.
+            </li>
+            <li>
+                PDDL addresses conformant planning, whereas DMPL addresses contingent planning
+                <a href="https://bit.ly/2Tjj7cO">(Reference).</a>
+            </li>
+            <li>
+                PDDL does not naturally support hierarchical planning.
+            </li>
+        </ul>
+    </section>
+</section>
+
+
+<section>
+    <h2><code>Appendix</code></h2>
+    <p>
+        EBNF Grammar.
+        The extended Backus-Naur form (EBNF) grammar of the Language Syntax is fully defined below.
+    </p>
+
+    <pre class="abnf">
+        /* Literal */
+            literal ::= string | number | boolean | 'null'
+
+        /* Boolean */
+            boolean ::= 'true' | 'false'
+
+        /* String */
+            name ::= [http://www.w3.org/TR/xml-names/#NT-NCName]
+            qt ::= '"'
+            tick ::= '`'
+            qt_start ::= qt tick
+            qt_close ::= tick qt
+            string ::= qt_start name qt_close
+
+        /* Number */
+            digit ::= [0-9]
+            number ::= ('-')? ((digit+ '.') | ('.' digit+) | digit+ | (digit+ '.' digit+))
+
+        /* Variable */
+            variable ::= qt name qt
+
+        /* Dictionary */
+            pairs ::= (string | variable) pair_delim expression (list_delim pairs)?
+            dictionary ::= block_start pairs block_end
+
+        /* Expression */
+            expression ::= literal
+            | variable
+            | dictionary
+            | '['
+            (literal | variable)
+            (',' expression)*
+            ']'
+
+        /* Statement */
+            statement ::= block_start (condition list_delim)? (await list_delim)? (once list_delim)? (effect | do | fork) block_end
+            condition ::= '"if"' pair_delim expression
+            await ::= '"await"' ':' expression
+            once ::= '"once"' ':' boolean
+
+        /* Terminal */
+            effect ::= act | set | def | run | use | pop
+            act ::= '"@act"' ':' expression
+            set ::= '"@set"' ':' expression ',' '"val"' ':' expression
+            def ::= '"@def"' ':' expression ',' '"val"' ':' statement
+            run ::= '"@run"' ':' expression (',' '"args"' ':' expression)?
+            use ::= '"@use"' ':' expression (',' '"import"' ':' expression)?
+            pop ::= '"@pop"' ':' expression
+
+        /* AND */
+            do ::= '"@do"' ':' '[' (statement (',' statement)*)? ']'
+
+        /* OR */
+            fork ::= '"@fork"' ':' '[' ( statement (',' statement)* )? ']' (',' scheme)?
+            scheme ::= '"scheme"' ':' expression
+
+    <?TOKENS?>
+        /*TOKENS*/
+            block_start ::= '{'
+            block_end ::= '}'
+            pair_delim ::= ':'
+            list_delim ::= ','
+    </pre>
+</section>
+</body>
 </html>

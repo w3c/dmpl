@@ -1,0 +1,33 @@
+#comparison-table{
+    border: black 1px solid;
+    border-collapse: collapse;
+    padding: 5px;
+    text-align: left;
+    vertical-align: baseline;
+
+}
+#expression-table{
+    border: black 1px solid;
+    border-collapse: collapse;
+    padding: 5px;
+    text-align: left;
+    vertical-align: baseline;
+
+}
+th, td {
+    padding: 5px;
+    text-align: left;
+    border: 1px solid black;
+}
+tr {
+    vertical-align: baseline;
+}
+
+code {
+    text-align: left;
+}
+
+pre.examples{
+    background-color: rgb(204,204,255);
+}
+
