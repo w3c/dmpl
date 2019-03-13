@@ -133,6 +133,7 @@
                 <img src="diagrams/literal.png" alt="Literal rail-road diagram">
                 <figcaption>Literal</figcaption>
             </figure>
+
         </section>
 
         <section>
@@ -214,6 +215,9 @@
                 <img src="diagrams/string.png" alt="String railroad diagram">
                 <figcaption>String</figcaption>
             </figure>
+            <pre class="example" title="string literal">
+                "`hello`"
+            </pre>
         </section>
 
         <section>
@@ -246,6 +250,9 @@
                 <img src="diagrams/number.png" alt="Number railroad diagram">
                 <figcaption>Number</figcaption>
             </figure>
+            <pre class="example" title="number literal">
+                0.2
+            </pre>
         </section>
     </section>
 
@@ -267,6 +274,9 @@
                 <img src="diagrams/variable.png" alt="Variable railroad diagram">
                 <figcaption>Variable</figcaption>
             </figure>
+            <pre class="example" title="variable">
+                "num_correct_answers"
+            </pre>
         </section>
 
         <section>
@@ -285,6 +295,9 @@
                 <img src="diagrams/dictionary.png" alt="Dictionary railroad diagram">
                 <figcaption>Dictionary</figcaption>
             </figure>
+            <pre class="example" title="dictionary">
+                {"`age`": "x", "`score`": 10, "`name`": "`Joe`"}
+            </pre>
         </section>
 
         <section>
@@ -312,116 +325,84 @@
             <table id="expression-table">
                 <tr>
                     <th>Return Type</th>
-                    <th>Operation Symbol</th>
+                    <th>Operator</th>
                     <th>Example</th>
-                    <th>Task-Definition</th>
                 </tr>
                 <tr>
-                    <th>String</th>
+                    <th><a>string</a></th>
                     <td><pre>"++"</pre></td>
-                    <td><pre>["++", "`hello`", "` `", "`world`"]</pre></td>
-                    <td><pre>foldl1 (++) args</pre><a href="https://bit.ly/2F6CoW6">Try online.</a></td>
+                    <td><pre class="example">["++", "`hello`", "` `", "`world`"] // => "`hello world`"</pre></td>
                 </tr>
                 <tr>
-                    <th>Number</th>
+                    <th><a>number</a></th>
                     <td><pre>"+"</pre></td>
-                    <td><pre>["+", 1, 2, 3, 4]</pre></td>
-                    <td><pre>foldl1 (+) args</pre><a href="https://bit.ly/2F6CoW6">Try online.</a></td>
+                    <td><pre class="example">["+", 1, 2, 3, 4] // => 10</pre></td>
                 </tr>
                 <tr>
-                    <th></th>
+                    <th><a>number</a></th>
                     <td><pre>"-"</pre></td>
-                    <td><pre>["-", 5, 3]</pre></td>
-                    <td><pre>foldl1 (-) args</pre></td>
+                    <td><pre class="example">["-", 5, 3] // => 2</pre></td>
                 </tr>
                 <tr>
-                    <th></th>
+                    <th><a>number</a></th>
                     <td><pre>"*"</pre></td>
-                    <td><pre>["*", 2, 4]</pre></td>
-                    <td><pre>foldl1 (*) args</pre></td>
+                    <td><pre class="example">["*", 2, 4] // => 8</pre></td>
                 </tr>
                 <tr>
-                    <th></th>
+                    <th><a>number</a></th>
                     <td><pre>"/"</pre></td>
-                    <td><pre>["/", 1, 2]</pre></td>
-                    <td><pre>foldl1 (/) args</pre></td>
+                    <td><pre class="example">["/", 1, 2] // => 0.5</pre></td>
                 </tr>
                 <tr>
-                    <th></th>
+                    <th><a>number</a></th>
                     <td><pre>"%"</pre></td>
-                    <td><pre>["%", 168, 2]</pre></td>
-                    <td><pre>(args !! 0) `mod` (args !! 1)</pre></td>
+                    <td><pre class="example">["%", 168, 2] // => 0</pre></td>
                 </tr>
                 <tr>
-                    <th>boolean</th>
+                    <th><a>boolean</a></th>
                     <td><pre>"=="</pre></td>
-                    <td><pre>["==", 1, 1, 1, 2]</pre></td>
-                    <td><pre>all (head args ==) (tail args)</pre></td>
+                    <td><pre class="example">["==", 1, 1, 1, 2] // => false</pre></td>
                 </tr>
                 <tr>
-                    <th></th>
-                    <td><pre>"!+"</pre></td>
-                    <td><pre>["!=", 1, 2]</pre></td>
-                    <td><pre>
-                        op args = allUnique args
-                            where allUnique = all ( (==) 1 . length) . sg
-                                sg        = group . sort</pre></td>
+                    <th><a>boolean</a></th>
+                    <td><pre>"!="</pre></td>
+                    <td><pre class="example">["!=", 1, 2] // => true</pre></td>
+
                 </tr>
                 <tr>
-                    <th></th>
+                    <th><a>boolean</a></th>
                     <td><pre>">"</pre></td>
-                    <td><pre>[">", 2, 3]</pre></td>
-                    <td><pre>(args !! 0) > (args !! 1)</pre></td>
+                    <td><pre class="example">[">", 2, 3] // => false</pre></td>
                 </tr>
                 <tr>
-                    <th></th>
+                    <th><a>boolean</a></th>
                     <td><pre>">="</pre></td>
-                    <td><pre>[">=", 2, 3]</pre></td>
-                    <td><pre>(args !! 0) >= (args !! 1)</pre></td>
+                    <td><pre class="example">[">=", 2, 3] // => false</pre></td>
                 </tr>
                 <tr>
-                    <th></th>
+                    <th><a>boolean</a></th>
                     <td><pre>"<"</pre></td>
-                    <td><pre>["<", 2, 3]</pre></td>
-                    <td><pre>(args !! 0) < (args !! 1)</pre></td>
+                    <td><pre class="example">["<", 2, 3] // => true</pre></td>
                 </tr>
                 <tr>
-                    <th></th>
+                    <th><a>boolean</a></th>
                     <td><pre>"<="</pre></td>
-                    <td><pre>["<=", 2, 3]</pre></td>
-                    <td><pre>(args !! 0) <= (args !! 1)</pre></td>
+                    <td><pre class="example">["<=", 2, 3] // => true</pre></td>
                 </tr>
                 <tr>
-                    <th></th>
+                    <th><a>boolean</a></th>
                     <td><pre>"&&"</pre></td>
-                    <td><pre>["&&", true, true, false]</pre></td>
-                    <td><pre>foldl1 (&&) args</pre></td>
+                    <td><pre class="example">["&&", true, true, false] // => false</pre></td>
                 </tr>
                 <tr>
-                    <th></th>
+                    <th><a>boolean</a></th>
                     <td><pre>"||"</pre></td>
-                    <td><pre>["||", true, true, false]</pre></td>
-                    <td><pre>foldl1 (||) args</pre></td>
+                    <td><pre class="example">["||", true, true, false] // => true</pre></td>
                 </tr>
                 <tr>
-                    <th></th>
+                    <th><a>boolean</a></th>
                     <td><pre>"in"</pre></td>
-                    <td><pre>["in", 3, [1, 2, 3]]</pre></td>
-                    <td><pre>elem (fst args) (snd args)</pre></td>
-                </tr>
-
-
-                <tr>
-                    <th>Loops</th>
-                    <td>For/While, Recursion</td>
-                    <td>Recursion</td>
-                    <td>None, loops are implicit.</td>
-                </tr>
-                <tr>
-                    <th>Primary Manipulation Unit</th>
-                    <td>Instances of structures or classes</td>
-                    <td>Functions</td>
-                    <td>Utility</td>
+                    <td><pre class="example">["in", 3, [1, 2, 3]] // => true</pre></td>
                 </tr>
             </table>
         </section>
@@ -464,6 +445,9 @@
                 <img src="diagrams/condition.png" alt="Condition railroad diagram">
                 <figcaption>Condition</figcaption>
             </figure>
+            <pre class="example" title="condition">
+                "if": [">", "num_wrong_answers", 3]
+            </pre>
         </section>
 
         <section>
@@ -480,6 +464,9 @@
                 <img src="diagrams/await.png" alt="Await railroad diagram">
                 <figcaption>Await</figcaption>
             </figure>
+            <pre class="example" title="await">
+                "await": ["input"]
+            </pre>
         </section>
 
         <section>
@@ -497,6 +484,9 @@
                 <img src="diagrams/once.png" alt="Once railroad diagram">
                 <figcaption>Once</figcaption>
             </figure>
+            <pre class="example" title="once">
+                "once": true
+            </pre>
         </section>
 
         <section>
@@ -522,45 +512,58 @@
             </p>
             <blockquote>
 	            <pre>
-	                act ::= '"@act"' ':' expression
+	                <a>act</a> ::= '"@act"' ':' <a>expression</a>
                 </pre>
             </blockquote>
             <figure id="act-railroad">
                 <img src="diagrams/act.png" alt="Act railroad diagram">
                 <figcaption>Act</figcaption>
             </figure>
+            <pre class="example" title="act">
+                "@act": {
+                  "`object`": "`tutor`",
+                  "`action`": "`say`",
+                  "`params`": {"`intent`": "`greeting`"}
+                }
+            </pre>
         </section>
 
         <section>
             <h2><code><dfn>set</dfn></code></h2>
             <p>
-                A <a>set</a> updates the value of the variable, where the name of the variable is specified by evaluating the expression.
+                A <a>set</a> updates the value of the <a>variable</a>, where the name of the variable is specified by evaluating the expression.
             </p>
             <blockquote>
 	            <pre>
-	                set ::= '"@set"'  ':' expression ',' '"val"' ':' expression
+	                <a>set</a> ::= '"@set"'  ':' <a>expression</a> ',' '"val"' ':' <a>expression</a>
                 </pre>
             </blockquote>
             <figure id="set-railroad">
                 <img src="diagrams/set.png" alt="Set railroad diagram">
                 <figcaption>Set</figcaption>
             </figure>
+            <pre class="example" title="set">
+                "@set": "`is_user_greeted`", "val": true
+            </pre>
         </section>
 
         <section>
             <h2><code><dfn>def</dfn></code></h2>
             <p>
-                A <a>def</a> defines a new expression that can be used later in the code.
+                A <a>def</a> defines a new <a>expression</a> that can be used later in the code.
             </p>
             <blockquote>
 	            <pre>
-	                def ::= '"@def"' ':' expression ',' '"val"' ':' statement
+	                <a>def</a> ::= '"@def"' ':' <a>expression</a> ',' '"val"' ':' <a>statement</a>
                 </pre>
             </blockquote>
             <figure id="def-railroad">
                 <img src="diagrams/def.png" alt="Def railroad diagram">
                 <figcaption>Def</figcaption>
             </figure>
+            <pre class="example" title="def">
+                "@def": ["", "`inc`", "`x`"], "val": {"@pop": ["+", 1, "x"]}
+            </pre>
         </section>
 
         <section>
@@ -570,45 +573,57 @@
             </p>
             <blockquote>
 	            <pre>
-	                run ::= '"@run"' ':' expression ( ',' '"args"' ':' expression )?
+	                <a>run</a> ::= '"@run"' ':' <a>expression</a> ( ',' '"args"' ':' <a>expression</a> )?
                 </pre>
             </blockquote>
             <figure id="run-railroad">
                 <img src="diagrams/run.png" alt="Run railroad diagram">
                 <figcaption>Run</figcaption>
             </figure>
+            <pre class="example" title="run">
+                "@run": "Outro"
+            </pre>
+            <pre class="example" title="run with args">
+                "@run": "Question", "args": ["", "`What's the largest planet?`", "`Jupiter`"]
+            </pre>
         </section>
 
         <section>
             <h2><code><dfn>use</dfn></code></h2>
             <p>
-                A <a>use</a> calls DMPL code in another file, optionally passing in variables names. It's similar to "from os import path" notation in Python.
+                A <a>use</a> calls DMPL code in another file, optionally passing in <a>variable</a> names. It's similar to <code>from os import path</code> notation in Python.
             </p>
             <blockquote>
 	            <pre>
-	                use ::= '"@use"' ':' expression ( ',' '"import"' ':' expression )?
+	                <a>use</a> ::= '"@use"' ':' <a>expression</a> ( ',' '"import"' ':' <a>expression</a> )?
                 </pre>
             </blockquote>
             <figure id="use-railroad">
                 <img src="diagrams/use.png" alt="Use railroad diagram">
                 <figcaption>Use</figcaption>
             </figure>
+            <pre class="example" title="use">
+                "@use": "`MathExpressions`", "import": ["", "`inc`", "`square`", "`exp`"]
+            </pre>
         </section>
 
         <section>
             <h2><code><dfn>pop</dfn></code></h2>
             <p>
-                A <a>pop</a> quits execution on the current DMPL code, pops the fluent-state from the stack, and resumes execution from the previous run location.
+                A <a>pop</a> quits execution on the current DMPL code, pops the fluent-state from the stack, and resumes execution from the previous <a>run</a> location.
             </p>
             <blockquote>
 	            <pre>
-	                pop ::= '"@pop"' ':' expression
+	                <a>pop</a> ::= '"@pop"' ':' <a>expression</a>
                 </pre>
             </blockquote>
             <figure id="pop-railroad">
                 <img src="diagrams/pop.png" alt="Pop railroad diagram">
                 <figcaption>Pop</figcaption>
             </figure>
+            <pre class="example" title="pop">
+                "@pop": true
+            </pre>
         </section>
 
         <section>
@@ -618,45 +633,62 @@
             </p>
             <blockquote>
 	            <pre>
-	                do ::= '"@do"' ':' '[' ( statement ( ',' statement )* )? ']'
+	                <a>do</a> ::= '"@do"' ':' '[' ( <a>statement</a> ( ',' <a>statement</a> )* )? ']'
                 </pre>
             </blockquote>
             <figure id="do-railroad">
                 <img src="diagrams/do.png" alt="Do railroad diagram">
                 <figcaption>Do</figcaption>
             </figure>
+            <pre class="example" title="do">
+                "@do": [
+                  {"@act": "a"},
+                  {"@act": "b"},
+                  {"@act": "c"}
+                ]
+            </pre>
         </section>
 
         <section>
             <h2><code><dfn>fork</dfn></code></h2>
             <p>
-                A <a>fork</a> statement is used in conjunction with an if statement. Forks specify the branch-like behavior of the list of statements that follow.
+                A <a>fork</a> statement specifies the branch-like behavior of the list of statements that follow.
             </p>
             <blockquote>
 	            <pre>
-	                fork ::= '"@fork"' ':' '[' ( statement ( ',' statement )* )? ']' ( ',' scheme )?
+	                <a>fork</a> ::= '"@fork"' ':' '[' ( <a>statement</a> ( ',' <a>statement</a> )* )? ']' ( ',' <a>scheme</a> )?
                 </pre>
             </blockquote>
             <figure id="fork-railroad">
                 <img src="diagrams/fork.png" alt="Fork railroad diagram">
                 <figcaption>Fork</figcaption>
             </figure>
+            <pre class="example" title="fork">
+                "@fork": [
+                  {"if": "is_user_greeted", "@act": "a"},
+                  {"if": [">", "num_wrong_answers", 3], "@act": "b"},
+                  {"@act": "c"}
+                ]
+            </pre>
         </section>
 
         <section>
             <h2><code><dfn>scheme</dfn></code></h2>
             <p>
-                A <a>scheme</a> is associated with a fork statement, and it describes the fork strategy.
+                A <a>scheme</a> is associated with a <a>fork</a> statement, and it describes the fork strategy.
             </p>
             <blockquote>
 	            <pre>
-	                scheme ::= '"scheme"' ':' expression
+	                <a>scheme</a> ::= '"scheme"' ':' <a>expression</a>
                 </pre>
             </blockquote>
             <figure id="scheme-railroad">
                 <img src="diagrams/scheme.png" alt="Scheme railroad diagram">
                 <figcaption>Scheme</figcaption>
             </figure>
+            <pre class="example" title="scheme">
+                {"depth": 3}
+            </pre>
         </section>
 
     </section>
@@ -702,7 +734,7 @@
     <pre class="example" title="Define New Expression">
         {
           "@do": [
-            {"@def": ["", "`inc`", "`x`"], "val": {"@return": ["+", 1, "x"]}},
+            {"@def": ["", "`inc`", "`x`"], "val": {"@pop": ["+", 1, "x"]}},
             {"@act", ["`inc`", 5]}
           ]
         }
@@ -853,7 +885,7 @@
     <h2><code>Related Technologies</code></h2>
     <i>This section is informative.</i>
     <section>
-        <h2>Planning Domain Definition Language(PDDL)</h2>
+        <h2>Planning Domain Definition Language (PDDL)</h2>
         <p>
             PDDL decouples the action-space(domain description) from the fluent space(problem description), just like
             DMPL.
