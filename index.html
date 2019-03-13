@@ -291,7 +291,24 @@
             <h2><code><dfn>expression</dfn></code></h2>
             <p>
                 An <a>expression</a> may be evaluated, and that result is stored in memory to be referenced later.
+                An expression may be denoted by a JSON array, in which case it is also called a <dfn>function</dfn>.
+                The first element of the array represents the operator of the <a>function</a>.
+                All remaining elements of the array constitute the operands.
             </p>
+            <blockquote>
+	            <pre>
+	                <a>expression</a> ::= <a>literal</a>
+                              | <a>variable</a>
+                              | <a>dictionary</a>
+                              | '[' ( <a>literal</a> | <a>variable</a> ) ( ',' <a>expression</a> )* ']'
+                </pre>
+            </blockquote>
+            <figure id="expression-railroad">
+                <img src="diagrams/expression.png" alt="Expression railroad diagram">
+                <figcaption>Expression</figcaption>
+            </figure>
+
+
             <table id="expression-table">
                 <tr>
                     <th>Return Type</th>
@@ -413,32 +430,91 @@
     <section>
         <h2><code><dfn data-dfn-type="dfn" id="statements">Statements</dfn></code></h2>
         <section>
-            <h2><code>Statement</code></h2>
+            <h2><code><dfn>statement</dfn></code></h2>
             <p>
-                A <b>statement</b> may be one of three possible types: <b>effect</b>, <b>do</b>, or <b>fork</b>.
-                Optionally, statements may contain <b>condition</b>, <b>await</b>, or <b>once</b> arguments.
+                A <a>statement</a> may be one of three possible types: <a>effect</a>, <a>do</a>, or <a>fork</a>.
+                Optionally, statements may contain <a>condition</a>, <a>await</a>, or <a>once</a> flags.
             </p>
+            <blockquote>
+	            <pre>
+	                <a>statement</a> ::= '{' ( <a>condition</a> ',' )?
+                               ( <a>await</a> ',' )?
+                               ( <a>once</a> ',' )?
+                               ( <a>effect</a> | <a>do</a> | <a>fork</a> ) '}'
+                </pre>
+            </blockquote>
+            <figure id="statement-railroad">
+                <img src="diagrams/statement.png" alt="Statement railroad diagram">
+                <figcaption>Statement</figcaption>
+            </figure>
         </section>
+
         <section>
-            <h2><code><dfn data-dfn-type="dfn" id="condition">Condition</dfn></code></h2>
+            <h2><code><dfn>condition</dfn></code></h2>
             <p>
-                A <b>condition</b> is a boolean expression that runs the statement if the expression evaluates to true.
+                A <a>condition</a> is a boolean expression that runs the statement if the expression evaluates to true.
                 A condition check takes priority over other parts of the statement.
             </p>
+            <blockquote>
+	            <pre>
+	                <a>condition</a> : : = '"if"' ':'  <a>expression</a>
+                </pre>
+            </blockquote>
+            <figure id="condition-railroad">
+                <img src="diagrams/condition.png" alt="Condition railroad diagram">
+                <figcaption>Condition</figcaption>
+            </figure>
         </section>
+
         <section>
-            <h2><code><dfn data-dfn-type="dfn" id="once">Once</dfn></code></h2>
+            <h2><code><dfn>await</dfn></code></h2>
             <p>
-                A <b>once</b> flag specified whether the statement can only be run once. By default, the once flag is set to
-                false.
+                An <a>await</a> blocks execution until a boolean expression evaluates to true.
             </p>
+            <blockquote>
+	            <pre>
+	                <a>once</a> ::= '"once"' ':' <a>boolean</a>
+                </pre>
+            </blockquote>
+            <figure id="await-railroad">
+                <img src="diagrams/await.png" alt="Await railroad diagram">
+                <figcaption>Await</figcaption>
+            </figure>
         </section>
+
         <section>
-            <h2><code><dfn data-dfn-type="dfn" id="effect">Effect</dfn></code></h2>
+            <h2><code><dfn>once</dfn></code></h2>
             <p>
-                An <b>effect</b> is a terminal node, meaning it does not produce more statements. There are 6 types of effects.
+                A <a>once</a> is a boolean expression that runs the statement if the expression evaluates to true.
+                A condition check takes priority over other parts of the statement.
             </p>
+            <blockquote>
+	            <pre>
+	                <a>once</a> ::= '"once"' ':' <a>boolean</a>
+                </pre>
+            </blockquote>
+            <figure id="once-railroad">
+                <img src="diagrams/once.png" alt="Once railroad diagram">
+                <figcaption>Once</figcaption>
+            </figure>
         </section>
+
+        <section>
+            <h2><code><dfn>effect</dfn></code></h2>
+            <p>
+                An <a>effect</a> is a terminal node, meaning it does not produce more statements. There are 6 types of effects.
+            </p>
+            <blockquote>
+	            <pre>
+	                <a>effect</a> ::= <a>act</a> | <a>set</a> | <a>def</a> | <a>run</a> | <a>use</a> | <a>pop</a>
+                </pre>
+            </blockquote>
+            <figure id="effect-railroad">
+                <img src="diagrams/effect.png" alt="Effect railroad diagram">
+                <figcaption>Effect</figcaption>
+            </figure>
+        </section>
+
         <section>
             <h2><code><dfn data-dfn-type="dfn" id="act">Act</dfn></code></h2>
             <p>
