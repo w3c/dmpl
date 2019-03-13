@@ -516,41 +516,101 @@
         </section>
 
         <section>
-            <h2><code><dfn data-dfn-type="dfn" id="act">Act</dfn></code></h2>
+            <h2><code><dfn>act</dfn></code></h2>
             <p>
-                An <b>act</b> represents an action specified by evaluating the expression. The result is interpreted by a client (see DMPL Act Messages).
+                An <a>act</a> represents an action specified by evaluating the expression. The result is interpreted by a client.
             </p>
+            <blockquote>
+	            <pre>
+	                act ::= '"@act"' ':' expression
+                </pre>
+            </blockquote>
+            <figure id="act-railroad">
+                <img src="diagrams/act.png" alt="Act railroad diagram">
+                <figcaption>Act</figcaption>
+            </figure>
         </section>
+
         <section>
-            <h2><code><dfn data-dfn-type="dfn" id="set">Set</dfn></code></h2>
+            <h2><code><dfn>set</dfn></code></h2>
             <p>
-                A <b>set</b> updates the value of the variable, where the name of the variable is specified by evaluating the expression.
+                A <a>set</a> updates the value of the variable, where the name of the variable is specified by evaluating the expression.
             </p>
+            <blockquote>
+	            <pre>
+	                set ::= '"@set"'  ':' expression ',' '"val"' ':' expression
+                </pre>
+            </blockquote>
+            <figure id="set-railroad">
+                <img src="diagrams/set.png" alt="Set railroad diagram">
+                <figcaption>Set</figcaption>
+            </figure>
         </section>
+
         <section>
-            <h2><code><dfn data-dfn-type="dfn" id="def">Def</dfn></code></h2>
+            <h2><code><dfn>def</dfn></code></h2>
             <p>
-                A <b>def</b> defines a new expression that can be used later in the code.
+                A <a>def</a> defines a new expression that can be used later in the code.
             </p>
+            <blockquote>
+	            <pre>
+	                def ::= '"@def"' ':' expression ',' '"val"' ':' statement
+                </pre>
+            </blockquote>
+            <figure id="def-railroad">
+                <img src="diagrams/def.png" alt="Def railroad diagram">
+                <figcaption>Def</figcaption>
+            </figure>
         </section>
+
         <section>
-            <h2><code><dfn data-dfn-type="dfn" id="run">Run</dfn></code></h2>
+            <h2><code><dfn>run</dfn></code></h2>
             <p>
-                A <b>run</b> calls DMPL code in another file, optionally passing in arguments. The current fluents are stored on the stack.
+                A <a>run</a> calls DMPL code in another file, optionally passing in arguments. The current fluents are stored on the stack.
             </p>
+            <blockquote>
+	            <pre>
+	                run ::= '"@run"' ':' expression ( ',' '"args"' ':' expression )?
+                </pre>
+            </blockquote>
+            <figure id="run-railroad">
+                <img src="diagrams/run.png" alt="Run railroad diagram">
+                <figcaption>Run</figcaption>
+            </figure>
         </section>
+
         <section>
-            <h2><code><dfn data-dfn-type="dfn" id="use">Use</dfn></code></h2>
+            <h2><code><dfn>use</dfn></code></h2>
             <p>
-                A <b>use</b> calls DMPL code in another file, optionally passing in variables names. It's similar to "from os import path" notation in Python.
+                A <a>use</a> calls DMPL code in another file, optionally passing in variables names. It's similar to "from os import path" notation in Python.
             </p>
+            <blockquote>
+	            <pre>
+	                use ::= '"@use"' ':' expression ( ',' '"import"' ':' expression )?
+                </pre>
+            </blockquote>
+            <figure id="use-railroad">
+                <img src="diagrams/use.png" alt="Use railroad diagram">
+                <figcaption>Use</figcaption>
+            </figure>
         </section>
+
         <section>
-            <h2><code><dfn data-dfn-type="dfn" id="pop">Pop</dfn></code></h2>
+            <h2><code><dfn>pop</dfn></code></h2>
             <p>
-                A <b>pop</b> quits execution on the current DMPL code, pops the fluent-state from the stack, and resumes execution from the previous run location.
+                A <a>pop</a> quits execution on the current DMPL code, pops the fluent-state from the stack, and resumes execution from the previous run location.
             </p>
+            <blockquote>
+	            <pre>
+	                pop ::= '"@pop"' ':' expression
+                </pre>
+            </blockquote>
+            <figure id="pop-railroad">
+                <img src="diagrams/pop.png" alt="Pop railroad diagram">
+                <figcaption>Pop</figcaption>
+            </figure>
         </section>
+
         <section>
             <h2><code><dfn data-dfn-type="dfn" id="do">Do</dfn></code></h2>
             <p>
