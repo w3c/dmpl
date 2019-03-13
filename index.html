@@ -35,24 +35,20 @@
 
 <section id='abstract'>
     <p>
-        This specification defines the final draft of DMPL.
+        This specification defines the final draft of DMPL, which defines the behavior of interactive systems in a formal language.
+        The user specifies the states (i.e. fluents), how they change (i.e. actions), and which are preferred (i.e. utility).
+        These three components characterize a task, so we call DMPL a task-oriented programming language.
+        The interpreter of the language should resolve the task by identifying and executing actions that maximize utility.
+    </p>
+</section>
 
-        DMPL defines the behavior of interactive systems in a formal language. The user of the language specifies the
-        states, how they change (i.e. action space), and which are preferred (i.e. utility). These three components
-        characterize a task, so we may call DMPL a task-oriented programming language. The compiler of the language
-        resolves the task by identifying and executing the actions defined in the action space.
-    </p>
-</section>
-<section id='sotd'>
-    <p>
-        This is required.
-    </p>
-</section>
+<section id='sotd'></section>
 
 <section id="conformance"></section>
 
 <section>
     <h2>Introduction</h2>
+
     <section>
         <h2>Scope</h2>
         <i>This section is informative.</i>
@@ -121,7 +117,7 @@
     </p>
 
     <section>
-        <h2><dfn>Atomic types</dfn></h2>
+        <h2><dfn>Atomic Types</dfn></h2>
         <section>
             <h2><code><dfn>literal</dfn></code></h2>
             <p>
@@ -261,7 +257,7 @@
     </section>
 
     <section>
-        <h2><dfn>Container structures</dfn></h2>
+        <h2><dfn>Container Structures</dfn></h2>
         <section>
             <h2><code><dfn>variable</dfn></code></h2>
             <p>
