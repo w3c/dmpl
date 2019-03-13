@@ -49,20 +49,22 @@
     </p>
 </section>
 
-<section data-dfn-for="Foo">
-    <h2><code>Introduction</code></h2>
+<section id="conformance"></section>
+
+<section>
+    <h2>Introduction</h2>
     <section>
-        <h2><code>Scope</code></h2>
+        <h2>Scope</h2>
         <i>This section is informative.</i>
         <p>
-            This document is limited to specifying the semantics for a general purpose <b>task-oriented</b> language for
+            This document is limited to specifying the syntax for a general purpose <b>task-oriented</b> language for
             interactive agents. This document is targeted at applications that would be expected to be used by content
             authors on a frequent basis. One example application of DMPL is an authoring tool to be used on a regular
             basis by a non-technical content writer.
         </p>
     </section>
     <section>
-        <h2><code>Goals and Motivation</code></h2>
+        <h2>Goals and Motivation</h2>
         <i>This section is informative.</i>
         <p>
             DMPL is a task-oriented programming language, which may be better explained by extending <a href="https://bit.ly/2Huf6fG">Microsoft's Function
@@ -108,8 +110,10 @@
         </table>
     </section>
 </section>
+
+
 <section>
-    <h2><code>Language Syntax</code></h2>
+    <h2>Language Syntax</h2>
     <i>This section is normative.</i>
     <p>
         This section of the document defines the types used within this specification using <a href="">
@@ -117,7 +121,7 @@
     </p>
 
     <section>
-        <h2><code><dfn>Atomic types</dfn></code></h2>
+        <h2><dfn>Atomic types</dfn></h2>
         <section>
             <h2><code><dfn>literal</dfn></code></h2>
             <p>
@@ -257,7 +261,7 @@
     </section>
 
     <section>
-        <h2><code><dfn>Container structures</dfn></code></h2>
+        <h2><dfn>Container structures</dfn></h2>
         <section>
             <h2><code><dfn>variable</dfn></code></h2>
             <p>
@@ -409,7 +413,7 @@
     </section>
 
     <section>
-        <h2><code><dfn data-dfn-type="dfn" id="statements">Statements</dfn></code></h2>
+        <h2><dfn>Statements</dfn></h2>
         <section>
             <h2><code><dfn>statement</dfn></code></h2>
             <p>
@@ -694,7 +698,7 @@
     </section>
 </section>
 <section>
-    <h2><code>Examples</code></h2>
+    <h2>Examples</h2>
     <i>This section is informative.</i>
     <p>
         This section details DMPL conforming example programs.
@@ -855,44 +859,33 @@
         }
     </pre>
 </section>
-<section>
-    <h2><code>References</code></h2>
-    <i>This section is informative.</i>
 
-    <p>
-        The primitive data types used and defined within this spec were influenced by <a href="https://bit.ly/2H35fx3">
-        ISO/IEC 11404.</a> The conforming DMPL JSON syntax was influenced by <a href="http://json.org/">json.org</a> and
-        <a href="https://jsonapi.org/">jsonapi.org</a>. The JSON Syntax defined within this document was developed
-        using <a href="https://bit.ly/2IWdz3b">EBNF</a>. The railroad diagrams were genereated using
-        <a href="https://bit.ly/2Tk2EVX">raildroad diagram generator.</a>
-    </p>
-</section>
+
 <section>
-    <h2><code>Conformances</code></h2>
-    <p>
-        As well as sections marked as non-normative, all authoring guidelines, diagrams, examples in this specification
-        are non-normative. Everything else within this specification is normative. This specification uses the key words
-        "MUST", "MUST NOT", "REQUIRED", "SHALL, "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and
-        "OPTIONAL" are to be interpreted as described in <a href="https://www.ietf.org/">Key words to use in RFCs to Indicate Requirement Levels
-        [RFC2119]</a>. For readability purposes, the aforementioned key words do not appear in all uppercase within this
-        specification. An authoring-tool, constraint problem solver, and robot controller is DMPL conforming if the used
-        expressions are valid DMPL expressions that may evaluate to binary values such as "True", or "False". A DMPL
-        file is conforming if it adheres to the JSON language syntax defined within this document. An interpreter is
-        conforming if it rejects non-conforming DMPL files, and accepts conforming DMPL files.
-    </p>
-</section>
-<section>
-    <h2><code>Related Technologies</code></h2>
+    <h2>Related Technologies</h2>
     <i>This section is informative.</i>
+    <section>
+        <h2>Artificial Intelligence Modelling Language (AIML)</h2>
+        <p>
+            AIML tightly couples dialogue logic with natural language processing (NLP).
+            DMPL, on the other hand, is a general representation for dialogue flow and control without text pattern matching rules.
+        </p>
+    </section>
+    <section>
+        <h2>ChatScript</h2>
+    </section>
+    <section>
+        <h2>RiveScript</h2>
+    </section>
     <section>
         <h2>Planning Domain Definition Language (PDDL)</h2>
         <p>
-            PDDL decouples the action-space(domain description) from the fluent space(problem description), just like
-            DMPL.
+            PDDL decouples the action-space (domain description) from the fluent space (problem description), just like
+            DMPL. However, PDDL v3.1 (the latest version as of April 2019) incurs the following limitations:
         </p>
-        However, PDDL v3.1(the latest version) incurs the following limitations:
+
         <ul>
-            <li>The definition of a goal in PDDL is restricted to first-order predicate logic. DMPL  instead
+            <li>The definition of a goal in PDDL is restricted to first-order predicate logic. DMPL instead
                 defines fluents by pair-wise preferences.
             </li>
             <li>
@@ -906,9 +899,21 @@
     </section>
 </section>
 
+<section>
+    <h2>References</h2>
+    <i>This section is informative.</i>
+    <p>
+        The primitive data types used and defined within this spec were influenced by <a href="https://bit.ly/2H35fx3">
+        ISO/IEC 11404.</a> The conforming DMPL JSON syntax was influenced by <a href="http://json.org/">json.org</a> and
+        <a href="https://jsonapi.org/">jsonapi.org</a>. The JSON Syntax defined within this document was developed
+        using <a href="https://bit.ly/2IWdz3b">EBNF</a>. The railroad diagrams were genereated using
+        <a href="https://bit.ly/2Tk2EVX">raildroad diagram generator.</a>
+    </p>
+</section>
+
 
 <section>
-    <h2><code>Appendix</code></h2>
+    <h2>Appendix</h2>
     <p>
         EBNF Grammar.
         The extended Backus-Naur form (EBNF) grammar of the Language Syntax is fully defined below.
@@ -980,9 +985,6 @@
     </pre>
 </section>
 
-<section id="idl-index" class="appendix">
-    <!-- All the Web IDL will magically appear here -->
-</section>
 
 </body>
 </html>
