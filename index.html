@@ -49,6 +49,9 @@
 <section>
     <h2>Introduction</h2>
 
+    We decouple the representation of a task from its execution.
+    This document concretely lays down the representation syntax, without going into the execution details.
+
     <section>
         <h2>Scope</h2>
         <i>This section is informative.</i>
@@ -75,27 +78,27 @@
             </tr>
             <tr>
                 <th>Programmer Focus</th>
-                <td>How to perform tasks(algorithms) and how to track changes in state.</td>
-                <td>What information is desired and what transformations are required.</td>
-                <td>Why an action is taken and how information changes.</td>
+                <td>How to perform tasks (algorithms) and how to track changes in state</td>
+                <td>What information is desired and what transformations are required</td>
+                <td>Why an action is taken and how information changes</td>
             </tr>
             <tr>
                 <th>State Changes</th>
                 <td>Important</td>
-                <td>Non-existant(for purely functional languages).</td>
+                <td>Non-existant (for purely functional languages)</td>
                 <td>Important</td>
             </tr>
             <tr>
                 <th>Order of Execution</th>
-                <td>Programmer is mostly responsible.</td>
-                <td>Hybrid resposibility.</td>
-                <td>Compiler is mostly responsible.</td>
+                <td>Programmer is mostly responsible</td>
+                <td>Hybrid resposibility</td>
+                <td>Compiler is mostly responsible</td>
             </tr>
             <tr>
                 <th>Loops</th>
                 <td>For/While, Recursion</td>
                 <td>Recursion</td>
-                <td>None, loops are implicit.</td>
+                <td>None, loops are implicit</td>
             </tr>
             <tr>
                 <th>Primary Manipulation Unit</th>
@@ -169,33 +172,33 @@
         </section>
 
         <section>
-            <h2><code><dfn>qt_start</dfn></code></h2>
+            <h2><code><dfn>quote_start</dfn></code></h2>
             <p>
-                A <a>qt_start</a> is the starting quotation mark, which indicates the beginning of a string.
+                A <a>quote_start</a> is the starting quotation mark, which indicates the beginning of a string.
             </p>
             <blockquote>
 	            <pre>
-	                <a>qt_start</a> ::= '"' '`'
+	                <a>quote_start</a> ::= '"' '`'
                 </pre>
             </blockquote>
-            <figure id="qt-start-railroad">
-                <img src="diagrams/qt_start.png" alt="Quote-start rail-road diagram">
+            <figure id="quote-start-railroad">
+                <img src="diagrams/quote_start.png" alt="Quote-start rail-road diagram">
                 <figcaption>Quote-start</figcaption>
             </figure>
         </section>
 
         <section>
-            <h2><code><dfn>qt_close</dfn></code></h2>
+            <h2><code><dfn>quote_close</dfn></code></h2>
             <p>
-                A <a>qt_close</a> is the ending quotation mark, which indicates the termination of a string.
+                A <a>quote_close</a> is the ending quotation mark, which indicates the termination of a string.
             </p>
             <blockquote>
 	            <pre>
-	                <a>qt_close</a> ::= '`' '"'
+	                <a>quote_close</a> ::= '`' '"'
                 </pre>
             </blockquote>
-            <figure id="qt-close-railroad">
-                <img src="diagrams/qt_start.png" alt="Quote-close rail-road diagram">
+            <figure id="quote-close-railroad">
+                <img src="diagrams/quote_start.png" alt="Quote-close rail-road diagram">
                 <figcaption>Quote-close</figcaption>
             </figure>
         </section>
@@ -208,7 +211,7 @@
             </p>
             <blockquote>
 	            <pre>
-	                <a>string</a> ::= <a>qt_start</a> <a>name</a> <a>qt_close</a>
+	                <a>string</a> ::= <a>quote_start</a> <a>name</a> <a>quote_close</a>
                 </pre>
             </blockquote>
             <figure id="string-railroad">
@@ -924,11 +927,11 @@
 
         /* String */
             name ::= [http://www.w3.org/TR/xml-names/#NT-NCName]
-            qt ::= '&quot;'
+            quote ::= '&quot;'
             tick ::= '`'
-            qt_start ::= qt tick
-            qt_close ::= tick qt
-            string ::= qt_start name qt_close
+            quote_start ::= quote tick
+            quote_close ::= tick quote
+            string ::= quote_start name quote_close
 
         /* Number */
             digit ::= [0-9]
