@@ -612,29 +612,53 @@
         </section>
 
         <section>
-            <h2><code><dfn data-dfn-type="dfn" id="do">Do</dfn></code></h2>
+            <h2><code><dfn>do</dfn></code></h2>
             <p>
-                A <b>do</b> statement specifies a list of statements to be executed.
+                A <a>do</a> statement specifies a list of statements to be executed.
             </p>
+            <blockquote>
+	            <pre>
+	                do ::= '"@do"' ':' '[' ( statement ( ',' statement )* )? ']'
+                </pre>
+            </blockquote>
+            <figure id="do-railroad">
+                <img src="diagrams/do.png" alt="Do railroad diagram">
+                <figcaption>Do</figcaption>
+            </figure>
         </section>
+
         <section>
-            <h2><code><dfn data-dfn-type="dfn" id="fork">Fork</dfn></code></h2>
+            <h2><code><dfn>fork</dfn></code></h2>
             <p>
-                A <b>fork</b> statement is used in conjunction with an if statement. Forks specify the branch-like behavior of the list of statements that follow.
+                A <a>fork</a> statement is used in conjunction with an if statement. Forks specify the branch-like behavior of the list of statements that follow.
             </p>
+            <blockquote>
+	            <pre>
+	                fork ::= '"@fork"' ':' '[' ( statement ( ',' statement )* )? ']' ( ',' scheme )?
+                </pre>
+            </blockquote>
+            <figure id="fork-railroad">
+                <img src="diagrams/fork.png" alt="Fork railroad diagram">
+                <figcaption>Fork</figcaption>
+            </figure>
         </section>
+
         <section>
-            <h2><code><dfn data-dfn-type="dfn" id="scheme">Scheme</dfn></code></h2>
+            <h2><code><dfn>scheme</dfn></code></h2>
             <p>
-                A <b>scheme</b> is associated with a fork statement, and it describes the fork strategy.
+                A <a>scheme</a> is associated with a fork statement, and it describes the fork strategy.
             </p>
+            <blockquote>
+	            <pre>
+	                scheme ::= '"scheme"' ':' expression
+                </pre>
+            </blockquote>
+            <figure id="scheme-railroad">
+                <img src="diagrams/scheme.png" alt="Scheme railroad diagram">
+                <figcaption>Scheme</figcaption>
+            </figure>
         </section>
-        <section>
-            <h2><code><dfn data-dfn-type="dfn" id="depth">Depth</dfn></code></h2>
-            <p>
-                Specifies the number of steps to look ahead using the respective search policy.
-            </p>
-        </section>
+
     </section>
 </section>
 <section>
