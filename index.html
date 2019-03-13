@@ -10,24 +10,24 @@
     <script class='remove'>
         let respecConfig = {
             wg: "Conversational Interfaces Working Group",
+            wgURI: "https://www.w3.org/community/conv/",
+            wgPublicList: "public-conv",
             specStatus: "CG-DRAFT",
+            shortName: "dmpl",
             editors: [{
-                name: "Nishant Shukla",
-                url: "http://shukla.io/",
+                name: "Nishant Shukla"
             }],
             authors: [{
-                name: "Nelson Solano",
+                name: "Nelson Solano"
             }, {
                 name: "Victor Zhang"
             }],
             edDraftURI: "https://github.com/w3c/dmpl",
-            otherLinks: [{
-                key: "Conversational Interfaces",
-                data: [{
-                    value: "Conversational Interfaces Working Group",
-                    href: "https://www.w3.org/community/conv/"}],
-            }],
-            addSectionLinks: true
+            addSectionLinks: true,
+            isPreview: true,
+            lint: {
+                "check-punctuation": true
+            }
         };
     </script>
 </head>
@@ -35,11 +35,11 @@
 
 <section id='abstract'>
     <p>
-        This specification defines the working draft of DMPL (v0.3).
+        This specification defines the final draft of DMPL.
 
         DMPL defines the behavior of interactive systems in a formal language. The user of the language specifies the
         states, how they change (i.e. action space), and which are preferred (i.e. utility). These three components
-        characterize a task, so we may call DMPL a tas-oriented programming language. The compiler of the language
+        characterize a task, so we may call DMPL a task-oriented programming language. The compiler of the language
         resolves the task by identifying and executing the actions defined in the action space.
     </p>
 </section>
@@ -48,6 +48,7 @@
         This is required.
     </p>
 </section>
+
 <section data-dfn-for="Foo">
     <h2><code>Introduction</code></h2>
     <section>
@@ -56,15 +57,15 @@
         <p>
             This document is limited to specifying the semantics for a general purpose <b>task-oriented</b> language for
             interactive agents. This document is targeted at applications that would be expected to be used by content
-            authors on a frequent basis. One example application of DMPL is an Authoring Tool to be used on a regular
-            basis.
+            authors on a frequent basis. One example application of DMPL is an authoring tool to be used on a regular
+            basis by a non-technical content writer.
         </p>
     </section>
     <section>
         <h2><code>Goals and Motivation</code></h2>
         <i>This section is informative.</i>
         <p>
-            We compare DMPL against other languages by extending <a href="https://bit.ly/2Huf6fG">Microsoft's Function
+            DMPL is a task-oriented programming language, which may be better explained by extending <a href="https://bit.ly/2Huf6fG">Microsoft's Function
             Programming vs. Imperative Programming</a> table, shown below.
         </p>
         <table id="comparison-table">
@@ -108,298 +109,305 @@
     </section>
 </section>
 <section>
-    <h2><code>Primitive Datatype's and JSON Language Syntax</code></h2>
+    <h2><code>Language Syntax</code></h2>
     <i>This section is normative.</i>
     <p>
         This section of the document defines the types used within this specification using <a href="">
         EBNF</a> notation with corresponding <a href="https://bit.ly/2Tk2EVX">railroad diagrams</a>.
     </p>
-    <section>
-        <h2><code><dfn data-dfn-type="dfn" id="literals">Literals</dfn></code></h2>
-        <section>
-            <h2><code><dfn data-dfn-type="dfn" id="literal">literal</dfn></code></h2>
-            <p>
-                A <b>literal</b> is a terminal atom that may be assigned to a variable or used as an operand to build
-                an expression.
-            </p>
-            <figure id="literal-railroad">
-                <img src="diagrams/literal.png" alt="">
-                <figcaption>. Literal railroad diagram.
-                    <pre>
-                        literal :: = string | number | boolean | 'null'
-                    </pre>
-                </figcaption>
-            </figure>
-
-        </section>
-
-        <section>
-            <h2><code><dfn data-dfn-type="dfn" id="boolean">boolean</dfn></code></h2>
-            <p>
-                A <b>boolean</b> may take on literal values <b>'true'</b> or <b>'false'</b>.
-            </p>
-            <figure id="boolean-railroad">
-                <img src="diagrams/boolean.png" alt="">
-                <figcaption>. Boolean railroad diagram.
-                    <pre>
-                        boolean :: = 'true' | 'false'
-                    </pre>
-                </figcaption>
-            </figure>
-        </section>
-
-        <section>
-            <h2><code><dfn data-dfn-type="dfn" id="name">name</dfn></code></h2>
-            <p>
-                A <b>name</b> is a sequence of characters conforming to those inthe XML standard.
-            </p>
-            <figure id="name-railroad">
-                <img src="diagrams/name.png" alt="">
-                <figcaption>. Name railroad diagram.
-                    <pre>
-                        name :: = [ http://www.w3.org/TR/xml-names/#NT-NCName ]
-                    </pre>
-                </figcaption>
-            </figure>
-        </section>
-
-        <section>
-            <h2><code><dfn data-dfn-type="dfn" id="qt_start">qt_start</dfn></code></h2>
-            <p>
-                A <b>qt_start</b> is the starting quotation mark indicates the beginning of a string.
-            </p>
-            <figure id="qt-start-railroad">
-                <img src="diagrams/qt_start.png" alt="">
-                <figcaption>. qt_start railroad diagram.
-                    <pre>
-                        qt_start :: = '"' '`'
-                    </pre>
-                </figcaption>
-            </figure>
-        </section>
-
-        <section>
-            <h2><code><dfn data-dfn-type="dfn" id="qt_close">qt_close</dfn></code></h2>
-            <p>
-                A <b>qt_close</b> is the ending quotation mark indicates the termination of a string.
-            </p>
-            <figure id="qt-close-railroad">
-                <img src="diagrams/qt_close.png" alt="">
-                <figcaption>. qt_close railroad diagram.
-                    <pre>
-                        qt_close :: = '`' '"'
-                    </pre>
-                </figcaption>
-            </figure>
-        </section>
-
-        <section>
-            <h2><code><dfn data-dfn-type="dfn" id="string">string</dfn></code></h2>
-            <p>
-                A <b>string</b> literal represents a finite sequence of characters. It is surrounded by starting and ending quotation marks.
-            </p>
-            <figure id="string-railroad">
-                <img src="diagrams/string.png" alt="">
-                <figcaption>. String railroad diagram.
-                    <pre>
-                        string :: = qt_start name qt_close
-                    </pre>
-                </figcaption>
-            </figure>
-        </section>
-
-        <section>
-            <h2><code><dfn data-dfn-type="dfn" id="digit">digit</dfn></code></h2>
-            <p>
-                A <b>digit</b> represents a real valued integer in the range [0-9].
-            </p>
-            <figure id="Digit railroad diagram.">
-                <img src="diagrams/digit.png" alt="">
-                <figcaption>. Digit railroad diagram.
-                    <pre>
-                        digit ::= [0-9]
-                    </pre>
-                </figcaption>
-            </figure>
-        </section>
-
-        <section>
-            <h2><code><dfn data-dfn-type="dfn" id="number">number</dfn></code></h2>
-            <p>
-                A <b>number</b> literal may represent either a positive or negative decimal value.
-            </p>
-            <figure id="number-railroad">
-                <img src="diagrams/number.png" alt="">
-                <figcaption>. Number railroad diagram.
-                    <pre>
-                        num ::= '-'? ( digit+ ( '.' digit* )? | '.' digit+ )
-                    </pre>
-                </figcaption>
-            </figure>
-        </section>
-    </section>
 
     <section>
-        <h2><code><dfn data-dfn-type="dfn" id="variables">Variables</dfn></code></h2>
-        <p>
-            Persistent memory is called a <b>fluent-state</b>, which is a mapping of names to values. A fluent state may
-            be accessed or modified in code. Fluent values may be <a class="internalDFN" href="#literals" data-link-type="dfn">literals</a><br>
-            or other more complicated structures.
-        </p>
+        <h2><code><dfn>Atomic types</dfn></code></h2>
         <section>
-            <h2><code><dfn data-dfn-type="dfn" id="variable">variable</dfn></code></h2>
+            <h2><code><dfn>literal</dfn></code></h2>
             <p>
-                A <b>variable</b> is a named reference to a fluent's value.
+                A <a>literal</a> is a terminal atom that may be assigned to a <a>variable</a>,
+                used in a <a>dictionary</a>, or used as an operand to build an <a>expression</a>.
             </p>
-            <figure id="variable-railroad">
-                <img src="diagrams/variable.png" alt="">
-                <figcaption>. Variable railroad diagram.
-                    <pre>
-                        variable :: = '"' name '"'
-                    </pre>
-                </figcaption>
-            </figure>
-        </section>
-    </section>
-
-    <section>
-        <h2><code><dfn data-dfn-type="dfn" id="dictionaries">Dictionaries</dfn></code></h2>
-        <p>
-            A <b>dictionary</b> is structure maps data in key-value pairs. The keys and values are all evaluated.
-        </p>
-        <figure id="dictionary-railroad">
-            <img src="diagrams/dictionary.png" alt="">
-            <figcaption>. Dictionary railroad diagram.
-                <pre>
-                        dictionary : : = '{' ( string | variable ) ':' expression ( ',' ( string | variable ) ':' expression )* '}'
+            <blockquote>
+	            <pre>
+	                <a>literal</a> ::= <a>string</a> | <a>number</a> | <a>boolean</a> | 'null'
                 </pre>
-            </figcaption>
-        </figure>
+            </blockquote>
+            <figure id="literal-railroad">
+                <img src="diagrams/literal.png" alt="Literal rail-road diagram">
+                <figcaption>Literal</figcaption>
+            </figure>
+        </section>
+
+        <section>
+            <h2><code><dfn>boolean</dfn></code></h2>
+            <p>
+                A <a>boolean</a> may take on values <code>'true'</code> or <code>'false'</code>.
+            </p>
+            <blockquote>
+	            <pre>
+	                <a>boolean</a> ::= 'true' | 'false'
+                </pre>
+            </blockquote>
+            <figure id="boolean-railroad">
+                <img src="diagrams/boolean.png" alt="Boolean rail-road diagram">
+                <figcaption>Boolean</figcaption>
+            </figure>
+        </section>
+
+        <section>
+            <h2><code><dfn>name</dfn></code></h2>
+            <p>
+                A <a>name</a> is a sequence of characters conforming to those in the XML standard.
+            </p>
+            <blockquote>
+	            <pre>
+	                <a>name</a> ::= [ http://www.w3.org/TR/xml-names/#NT-NCName ]
+                </pre>
+            </blockquote>
+            <figure id="name-railroad">
+                <img src="diagrams/name.png" alt="Name rail-road diagram">
+                <figcaption>Name</figcaption>
+            </figure>
+        </section>
+
+        <section>
+            <h2><code><dfn>qt_start</dfn></code></h2>
+            <p>
+                A <a>qt_start</a> is the starting quotation mark, which indicates the beginning of a string.
+            </p>
+            <blockquote>
+	            <pre>
+	                <a>qt_start</a> ::= '"' '`'
+                </pre>
+            </blockquote>
+            <figure id="qt-start-railroad">
+                <img src="diagrams/qt_start.png" alt="Quote-start rail-road diagram">
+                <figcaption>Quote-start</figcaption>
+            </figure>
+        </section>
+
+        <section>
+            <h2><code><dfn>qt_close</dfn></code></h2>
+            <p>
+                A <a>qt_close</a> is the ending quotation mark, which indicates the termination of a string.
+            </p>
+            <blockquote>
+	            <pre>
+	                <a>qt_close</a> ::= '`' '"'
+                </pre>
+            </blockquote>
+            <figure id="qt-close-railroad">
+                <img src="diagrams/qt_start.png" alt="Quote-close rail-road diagram">
+                <figcaption>Quote-close</figcaption>
+            </figure>
+        </section>
+
+        <section>
+            <h2><code><dfn>string</dfn></code></h2>
+            <p>
+                A <a>string</a> literal represents a finite sequence of characters.
+                It is surrounded by starting and ending quotation marks.
+            </p>
+            <blockquote>
+	            <pre>
+	                <a>string</a> ::= <a>qt_start</a> <a>name</a> <a>qt_close</a>
+                </pre>
+            </blockquote>
+            <figure id="string-railroad">
+                <img src="diagrams/string.png" alt="String railroad diagram">
+                <figcaption>String</figcaption>
+            </figure>
+        </section>
+
+        <section>
+            <h2><code><dfn>digit</dfn></code></h2>
+            <p>
+                A <a>digit</a> represents a real valued integer in the range [0-9].
+            </p>
+            <blockquote>
+	            <pre>
+	                <a>digit</a> ::= [0-9]
+                </pre>
+            </blockquote>
+            <figure id="digit-railroad">
+                <img src="diagrams/digit.png" alt="Digit railroad diagram">
+                <figcaption>Digit</figcaption>
+            </figure>
+        </section>
+
+        <section>
+            <h2><code><dfn>number</dfn></code></h2>
+            <p>
+                A <a>number</a> literal may represent either a positive or negative decimal value.
+            </p>
+            <blockquote>
+	            <pre>
+	                <a>number</a> ::= '-'? ( <a>digit</a>+ ( '.' <a>digit</a>* )? | '.' <a>digit</a>+ )
+                </pre>
+            </blockquote>
+            <figure id="number-railroad">
+                <img src="diagrams/number.png" alt="Number railroad diagram">
+                <figcaption>Number</figcaption>
+            </figure>
+        </section>
     </section>
 
     <section>
-        <h2><code><dfn data-dfn-type="dfn" id="expressions">Expressions</dfn></code></h2>
+        <h2><code><dfn>Container structures</dfn></code></h2>
         <section>
-            <h2><code>Expression</code></h2>
+            <h2><code><dfn>variable</dfn></code></h2>
             <p>
-                An <b></b> may be evaluated, and that result is stored in memory to be referenced later.
+                Persistent memory is a mapping of names to values.
+                The values are <a>expressions</a>, which may be accessed or modified in code.
+                A <a>variable</a> is a named reference to a value.
             </p>
+            <blockquote>
+                    <pre>
+                        <a>variable</a> :: = '"' <a>name</a> '"'
+                    </pre>
+            </blockquote>
+            <figure id="variable-railroad">
+                <img src="diagrams/variable.png" alt="Variable railroad diagram">
+                <figcaption>Variable</figcaption>
+            </figure>
         </section>
-        <table id="expression-table">
-            <tr>
-                <th>Return Type</th>
-                <th>Operation Symbol</th>
-                <th>Example</th>
-                <th>Task-Definition</th>
-            </tr>
-            <tr>
-                <th>String</th>
-                <td><pre>"++"</pre></td>
-                <td><pre>["++", "`hello`", "` `", "`world`"]</pre></td>
-                <td><pre>foldl1 (++) args</pre><a href="https://bit.ly/2F6CoW6">Try online.</a></td>
-            </tr>
-            <tr>
-                <th>Number</th>
-                <td><pre>"+"</pre></td>
-                <td><pre>["+", 1, 2, 3, 4]</pre></td>
-                <td><pre>foldl1 (+) args</pre><a href="https://bit.ly/2F6CoW6">Try online.</a></td>
-            </tr>
-            <tr>
-                <th></th>
-                <td><pre>"-"</pre></td>
-                <td><pre>["-", 5, 3]</pre></td>
-                <td><pre>foldl1 (-) args</pre></td>
-            </tr>
-            <tr>
-                <th></th>
-                <td><pre>"*"</pre></td>
-                <td><pre>["*", 2, 4]</pre></td>
-                <td><pre>foldl1 (*) args</pre></td>
-            </tr>
-            <tr>
-                <th></th>
-                <td><pre>"/"</pre></td>
-                <td><pre>["/", 1, 2]</pre></td>
-                <td><pre>foldl1 (/) args</pre></td>
-            </tr>
-            <tr>
-                <th></th>
-                <td><pre>"%"</pre></td>
-                <td><pre>["%", 168, 2]</pre></td>
-                <td><pre>(args !! 0) `mod` (args !! 1)</pre></td>
-            </tr>
-            <tr>
-                <th>boolean</th>
-                <td><pre>"=="</pre></td>
-                <td><pre>["==", 1, 1, 1, 2]</pre></td>
-                <td><pre>all (head args ==) (tail args)</pre></td>
-            </tr>
-            <tr>
-                <th></th>
-                <td><pre>"!+"</pre></td>
-                <td><pre>["!=", 1, 2]</pre></td>
-                <td><pre>
-                    op args = allUnique args
-                        where allUnique = all ( (==) 1 . length) . sg
-                            sg        = group . sort</pre></td>
-            </tr>
-            <tr>
-                <th></th>
-                <td><pre>">"</pre></td>
-                <td><pre>[">", 2, 3]</pre></td>
-                <td><pre>(args !! 0) > (args !! 1)</pre></td>
-            </tr>
-            <tr>
-                <th></th>
-                <td><pre>">="</pre></td>
-                <td><pre>[">=", 2, 3]</pre></td>
-                <td><pre>(args !! 0) >= (args !! 1)</pre></td>
-            </tr>
-            <tr>
-                <th></th>
-                <td><pre>"<"</pre></td>
-                <td><pre>["<", 2, 3]</pre></td>
-                <td><pre>(args !! 0) < (args !! 1)</pre></td>
-            </tr>
-            <tr>
-                <th></th>
-                <td><pre>"<="</pre></td>
-                <td><pre>["<=", 2, 3]</pre></td>
-                <td><pre>(args !! 0) <= (args !! 1)</pre></td>
-            </tr>
-            <tr>
-                <th></th>
-                <td><pre>"&&"</pre></td>
-                <td><pre>["&&", true, true, false]</pre></td>
-                <td><pre>foldl1 (&&) args</pre></td>
-            </tr>
-            <tr>
-                <th></th>
-                <td><pre>"||"</pre></td>
-                <td><pre>["||", true, true, false]</pre></td>
-                <td><pre>foldl1 (||) args</pre></td>
-            </tr>
-            <tr>
-                <th></th>
-                <td><pre>"in"</pre></td>
-                <td><pre>["in", 3, [1, 2, 3]]</pre></td>
-                <td><pre>elem (fst args) (snd args)</pre></td>
-            </tr>
+
+        <section>
+            <h2><code><dfn>dictionary</dfn></code></h2>
+            <p>
+                A <a>dictionary</a> is a structure that maps data in key-value pairs.
+                The keys and values are all evaluated.
+            </p>
+            <blockquote>
+                <pre>
+                    <a>dictionary</a> : : = '{' ( <a>string</a> | <a>variable</a> ) ':' <a>expression</a>
+                                     ( ',' ( <a>string</a> | <a>variable</a> ) ':' <a>expression</a> )* '}'
+                </pre>
+            </blockquote>
+            <figure id="dictionary-railroad">
+                <img src="diagrams/dictionary.png" alt="Dictionary railroad diagram">
+                <figcaption>Dictionary</figcaption>
+            </figure>
+        </section>
+
+        <section>
+            <h2><code><dfn>expression</dfn></code></h2>
+            <p>
+                An <a>expression</a> may be evaluated, and that result is stored in memory to be referenced later.
+            </p>
+            <table id="expression-table">
+                <tr>
+                    <th>Return Type</th>
+                    <th>Operation Symbol</th>
+                    <th>Example</th>
+                    <th>Task-Definition</th>
+                </tr>
+                <tr>
+                    <th>String</th>
+                    <td><pre>"++"</pre></td>
+                    <td><pre>["++", "`hello`", "` `", "`world`"]</pre></td>
+                    <td><pre>foldl1 (++) args</pre><a href="https://bit.ly/2F6CoW6">Try online.</a></td>
+                </tr>
+                <tr>
+                    <th>Number</th>
+                    <td><pre>"+"</pre></td>
+                    <td><pre>["+", 1, 2, 3, 4]</pre></td>
+                    <td><pre>foldl1 (+) args</pre><a href="https://bit.ly/2F6CoW6">Try online.</a></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><pre>"-"</pre></td>
+                    <td><pre>["-", 5, 3]</pre></td>
+                    <td><pre>foldl1 (-) args</pre></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><pre>"*"</pre></td>
+                    <td><pre>["*", 2, 4]</pre></td>
+                    <td><pre>foldl1 (*) args</pre></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><pre>"/"</pre></td>
+                    <td><pre>["/", 1, 2]</pre></td>
+                    <td><pre>foldl1 (/) args</pre></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><pre>"%"</pre></td>
+                    <td><pre>["%", 168, 2]</pre></td>
+                    <td><pre>(args !! 0) `mod` (args !! 1)</pre></td>
+                </tr>
+                <tr>
+                    <th>boolean</th>
+                    <td><pre>"=="</pre></td>
+                    <td><pre>["==", 1, 1, 1, 2]</pre></td>
+                    <td><pre>all (head args ==) (tail args)</pre></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><pre>"!+"</pre></td>
+                    <td><pre>["!=", 1, 2]</pre></td>
+                    <td><pre>
+                        op args = allUnique args
+                            where allUnique = all ( (==) 1 . length) . sg
+                                sg        = group . sort</pre></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><pre>">"</pre></td>
+                    <td><pre>[">", 2, 3]</pre></td>
+                    <td><pre>(args !! 0) > (args !! 1)</pre></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><pre>">="</pre></td>
+                    <td><pre>[">=", 2, 3]</pre></td>
+                    <td><pre>(args !! 0) >= (args !! 1)</pre></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><pre>"<"</pre></td>
+                    <td><pre>["<", 2, 3]</pre></td>
+                    <td><pre>(args !! 0) < (args !! 1)</pre></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><pre>"<="</pre></td>
+                    <td><pre>["<=", 2, 3]</pre></td>
+                    <td><pre>(args !! 0) <= (args !! 1)</pre></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><pre>"&&"</pre></td>
+                    <td><pre>["&&", true, true, false]</pre></td>
+                    <td><pre>foldl1 (&&) args</pre></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><pre>"||"</pre></td>
+                    <td><pre>["||", true, true, false]</pre></td>
+                    <td><pre>foldl1 (||) args</pre></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><pre>"in"</pre></td>
+                    <td><pre>["in", 3, [1, 2, 3]]</pre></td>
+                    <td><pre>elem (fst args) (snd args)</pre></td>
+                </tr>
 
 
-            <tr>
-                <th>Loops</th>
-                <td>For/While, Recursion</td>
-                <td>Recursion</td>
-                <td>None, loops are implicit.</td>
-            </tr>
-            <tr>
-                <th>Primary Manipulation Unit</th>
-                <td>Instances of structures or classes</td>
-                <td>Functions</td>
-                <td>Utility</td>
-            </tr>
-        </table>
+                <tr>
+                    <th>Loops</th>
+                    <td>For/While, Recursion</td>
+                    <td>Recursion</td>
+                    <td>None, loops are implicit.</td>
+                </tr>
+                <tr>
+                    <th>Primary Manipulation Unit</th>
+                    <td>Instances of structures or classes</td>
+                    <td>Functions</td>
+                    <td>Utility</td>
+                </tr>
+            </table>
+        </section>
     </section>
 
     <section>
@@ -499,20 +507,12 @@
     <p>
         This section details DMPL conforming example programs.
     </p>
-    <b>Hello World!</b>
-    <pre>
+    <pre class="example" title="Hello World!">
         {
           "@act": "`hello world`"
         }
-
-        {
-          "@act": {"version": "1", "id": "1", "interrupt": false, "block": [
-            {"id": "1", "object": "goose", "action": "say" "delay": 0, "params": {"intent": "greeting", "handle": "...", "utterance": "hello world"}}
-          ]}
-        }
     </pre>
-    <b>"Do" Statement</b>
-    <pre>
+    <pre class="example" title="Do-statement">
         {
           "@do": [
             {"@act": "`hello`"},
@@ -520,8 +520,7 @@
           ]
         }
     </pre>
-    <b>If-Else Control Flow</b>
-    <pre>
+    <pre class="example" title="If-Else Control Flow">
         {
           "@fork": [
             {"if": ["==", ["+", 2, 2], 4], "@act": "`this statement is run`"},
@@ -529,8 +528,7 @@
           ]
         }
     </pre>
-    <b>Variables</b>
-    <pre>
+    <pre class="example" title="Variables">
         {
           "@fork": [
             {"if": ["?", "`x`"], "@set": "`x`", "val": 0},
@@ -541,8 +539,7 @@
           ]
         }
     </pre>
-    <b>Define New Expression</b>
-    <pre>
+    <pre class="example" title="Define New Expression">
         {
           "@do": [
             {"@def": ["", "`inc`", "`x`"], "val": {"@return": ["+", 1, "x"]}},
@@ -550,8 +547,7 @@
           ]
         }
     </pre>
-    <b>Unpacking an Array</b>
-    <pre>
+    <pre class="example" title="Unpacking an Array">
         {
           "@do": [
             {"@set": "`content`", "val": ["", "`What's the biggest planet?`", "`Jupiter`"]},
@@ -559,8 +555,7 @@
           ]
         }
     </pre>
-    <b>Running Components</b>
-    <pre>
+    <pre class="example" title="Running Components">
         {"@do":
           {"@run": "`Question`", "args": ["", "`What's the biggest planet?`", "`Jupiter`"]},
           {"await": ["return"], "@fork": [
@@ -569,8 +564,7 @@
           ]}
         }
     </pre>
-    <b>Importing Expressions</b>
-    <pre>
+    <pre class="example" title="Importing Expressions">
         {
           "@do": [
             {"@use": "`MathExpressions`", "import": ["", "`square`", "`exp`"]},
@@ -578,8 +572,7 @@
           ]
         }
     </pre>
-    <b>Input Handling</b>
-    <pre>
+    <pre class="example" title="Input Handling">
         {
           "@do": [
             {"@act": "`are you ready?`"},
@@ -590,8 +583,7 @@
           ]
         }
     </pre>
-    <b>Greet and Ask Question</b>
-    <pre>
+    <pre class="example" title="Greet and Ask Question">
         {
           "scheme": {"depth":  2}, "@fork": [
             {"if": ["?", "`greeted`"], "@set": "`greeted`", "val": false},
@@ -609,8 +601,7 @@
           ]
         }
     </pre>
-    <b>Planet Trivia</b>
-    <pre>
+    <pre class="example" title="Planet Trivia">
         {
           "@fork": [
             {"@do": [
@@ -740,7 +731,7 @@
 
         /* String */
             name ::= [http://www.w3.org/TR/xml-names/#NT-NCName]
-            qt ::= '"'
+            qt ::= '&quot;'
             tick ::= '`'
             qt_start ::= qt tick
             qt_close ::= tick qt
@@ -788,7 +779,7 @@
             fork ::= '"@fork"' ':' '[' ( statement (',' statement)* )? ']' (',' scheme)?
             scheme ::= '"scheme"' ':' expression
 
-    <?TOKENS?>
+        <?TOKENS?>
         /*TOKENS*/
             block_start ::= '{'
             block_end ::= '}'
@@ -796,5 +787,10 @@
             list_delim ::= ','
     </pre>
 </section>
+
+<section id="idl-index" class="appendix">
+    <!-- All the Web IDL will magically appear here -->
+</section>
+
 </body>
 </html>
