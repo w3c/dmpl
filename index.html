@@ -163,7 +163,7 @@
             </p>
             <blockquote>
 	            <pre>
-	                <a>name</a> ::= [ http://www.w3.org/TR/xml-names/#NT-NCName ]
+	                <a>name</a> ::= [ <a href="http://www.w3.org/TR/xml-names/#NT-NCName">http://www.w3.org/TR/xml-names/#NT-NCName</a> ]
                 </pre>
             </blockquote>
             <figure id="name-railroad">
@@ -469,7 +469,7 @@
             </p>
             <blockquote>
 	            <pre>
-	                <a>once</a> ::= '"once"' ':' <a>boolean</a>
+	                <a>await</a> ::= '"await"' ':' <a>expression</a>
                 </pre>
             </blockquote>
             <figure id="await-railroad">
@@ -484,8 +484,8 @@
         <section>
             <h2><code><dfn>once</dfn></code></h2>
             <p>
-                A <a>once</a> is a boolean expression that runs the statement if the expression evaluates to true.
-                A condition check takes priority over other parts of the statement.
+                A <a>once</a> flag specified whether the statement can only be run once.
+                By default, the once flag is set to false.
             </p>
             <blockquote>
 	            <pre>
@@ -687,7 +687,7 @@
         <section>
             <h2><code><dfn>scheme</dfn></code></h2>
             <p>
-                A <a>scheme</a> is associated with a <a>fork</a> statement, and it describes the fork strategy.
+                A <a>scheme</a> is associated with a <a>fork</a> statement, and it describes the fork branch resolution strategy.
             </p>
             <blockquote>
 	            <pre>
