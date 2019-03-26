@@ -403,6 +403,11 @@
                     <td><pre>"||"</pre></td>
                     <td><pre class="example">["||", true, true, false] // => true</pre></td>
                 </tr>
+		<tr>
+                    <th><a>boolean</a></th>
+                    <td><pre>"!"</pre></td>
+                    <td><pre class="example">["!", false] // => true</pre></td>
+                </tr>
                 <tr>
                     <th><a>boolean</a></th>
                     <td><pre>"in"</pre></td>
@@ -416,6 +421,14 @@
                         <pre class="example">["input", "yes"] // => true if there's an input and it equals "`yes`"</pre>
                     </td>
                 </tr>
+		<tr>
+                    <th><a>boolean</a></th>
+                    <td><pre>"return"</pre></td>
+                    <td>
+                        <pre class="example">["return"] // => true if there's an return result from callee</pre>
+                    </td>
+                </tr>
+
             </table>
         </section>
     </section>
@@ -736,12 +749,10 @@
     </pre>
     <pre class="example" title="Variables">
         {
-          "@fork": [
-            {"if": ["?", "`x`"], "@set": "`x`", "val": 0},
-            {"@do": [
-              {"@set": "`x`", "val": ["+", 1, "x"]},
-              {"@act": "x"}
-            ]}
+          "@do": [
+            {"@set": "`a`", "val": 1},
+            {"@set": "`b`", "val": 2},
+            {"@set": "`c`", "val": ["+", "a", "b"]}
           ]
         }
     </pre>
