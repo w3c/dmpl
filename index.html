@@ -844,22 +844,22 @@
               {"@do": [
                 {"@act": "Question"},
                 {"@fork": [
-                  {"if": ["act", "CA"], "@do": [
+                  {"if": ["input", "CA"], "@do": [
                     {"@act": "CA-Response"},
                     {"@set": "`Is-Answer-Given`", "val": true}
                   ]},
-                  {"if": ["act", "WA1"], "@do": [
+                  {"if": ["input", "WA1"], "@do": [
                     {"@act": "WA1-Response"},
                     {"@set": "`Wrong-Counter`", "val":  ["+", 1, "Wrong-Counter"]}
                   ]},
-                  {"if": ["act", "WA2"], "@do": [
+                  {"if": ["input", "WA2"], "@do": [
                     {"@act": "WA2-Response"},
                     {"@set": "`Wrong-Counter`", "val":  ["+", 1, "Wrong-Counter"]}
                   ]},
                   {"@do": [
                     {"@set": "`Wrong-Counter`", "val":  ["+", 1, "Wrong-Counter"]}
                   ]}
-                ], "await": ["act"]}
+                ], "await": ["input"]}
               ], "if": ["&&", ["<=", "Wrong-Counter", 3], ["!", "Is-Answer-Given"]]},
               {"@do": [
                 {"@act": "Hint-Announcement"},
