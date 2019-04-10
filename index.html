@@ -265,9 +265,7 @@
         <section>
             <h2><code><dfn>variable</dfn></code></h2>
             <p>
-                Persistent memory is a mapping of names to values.
-                The values are <a>expressions</a>, which may be accessed or modified in code.
-                A <a>variable</a> is a named reference to a value.
+                A <a>variable</a> is a named reference to a <a>literal</a>, <a>dictionary</a>, or <a>expression</a>.
             </p>
             <blockquote>
                     <pre>
@@ -279,7 +277,7 @@
                 <figcaption>Variable</figcaption>
             </figure>
             <pre class="example" title="variable">
-                "num_correct_answers"
+                "num_correct_answers" // => 3
             </pre>
         </section>
 
@@ -335,12 +333,12 @@
                 <tr>
                     <th><a>string</a></th>
                     <td><pre>"++"</pre></td>
-                    <td><pre class="example">["++", "`hello`", "` `", "`world`"] // => "`hello world`"</pre></td>
+                    <td><pre class="example">["++", "`hello `", "`world`"] // => "`hello world`"</pre></td>
                 </tr>
                 <tr>
                     <th><a>number</a></th>
                     <td><pre>"+"</pre></td>
-                    <td><pre class="example">["+", 1, 2, 3, 4] // => 10</pre></td>
+                    <td><pre class="example">["+", 1, 2] // => 3</pre></td>
                 </tr>
                 <tr>
                     <th><a>number</a></th>
@@ -362,10 +360,25 @@
                     <td><pre>"%"</pre></td>
                     <td><pre class="example">["%", 168, 2] // => 0</pre></td>
                 </tr>
+		<tr>
+                    <th>list</th>
+                    <td><pre>""</pre></td>
+                    <td><pre class="example">["", 1, 2, 3, 4, 5] // => [1, 2, 3, 4, 5]</pre></td>
+                </tr>
+		<tr>
+                    <th>list</th>
+                    <td><pre>"enumFromTo"</pre></td>
+                    <td><pre class="example">["enumFromTo", 1, 5] // => [1, 2, 3, 4, 5]</pre></td>
+                </tr>
+		<tr>
+                    <th>list</th>
+                    <td><pre>"enumFromThenTo"</pre></td>
+                    <td><pre class="example">["enumFromThenTo", 1, 3, 10] // => [1, 3, 5, 7, 9]</pre></td>
+                </tr>
                 <tr>
                     <th><a>boolean</a></th>
                     <td><pre>"=="</pre></td>
-                    <td><pre class="example">["==", 1, 1, 1, 2] // => false</pre></td>
+                    <td><pre class="example">["==", 1, 2] // => false</pre></td>
                 </tr>
                 <tr>
                     <th><a>boolean</a></th>
@@ -396,12 +409,12 @@
                 <tr>
                     <th><a>boolean</a></th>
                     <td><pre>"&&"</pre></td>
-                    <td><pre class="example">["&&", true, true, false] // => false</pre></td>
+                    <td><pre class="example">["&&", true, false] // => false</pre></td>
                 </tr>
                 <tr>
                     <th><a>boolean</a></th>
                     <td><pre>"||"</pre></td>
-                    <td><pre class="example">["||", true, true, false] // => true</pre></td>
+                    <td><pre class="example">["||", true, false] // => true</pre></td>
                 </tr>
 		<tr>
                     <th><a>boolean</a></th>
@@ -411,7 +424,7 @@
                 <tr>
                     <th><a>boolean</a></th>
                     <td><pre>"in"</pre></td>
-                    <td><pre class="example">["in", 3, [1, 2, 3]] // => true</pre></td>
+                    <td><pre class="example">["in", 3, ["", 1, 2, 3]] // => true</pre></td>
                 </tr>
                 <tr>
                     <th><a>boolean</a></th>
@@ -428,6 +441,26 @@
                         <pre class="example">["return"] // => true if there's an return result from callee</pre>
                     </td>
                 </tr>
+                <tr>
+                    <th><a>boolean</a></th>
+                    <td><pre>"exists"</pre></td>
+                    <td><pre class="example">["exists", "`is_greeted`"] // => false if variable not initialized</pre></td>
+                </tr>
+		<tr>
+                    <th>dynamic</th>
+                    <td><pre>"get"</pre></td>
+                    <td>
+                        <pre class="example">["get", 0, ["", 1, 2, 3]] // => 1</pre>
+		        <pre class="example">["get", "`a`", {"`a`": 1}] // => 1</pre>
+                    </td>
+                </tr>
+		<tr>
+                    <th>dynamic</th>
+                    <td><pre>"pick"</pre></td>
+                    <td>
+                        <pre class="example">["pick", ["", 1, 2, 3]] // => 1, 2, or 3 uniformly at random</pre>
+                    </td>
+                </tr>
 
             </table>
         </section>
@@ -438,7 +471,7 @@
         <section>
             <h2><code><dfn>statement</dfn></code></h2>
             <p>
-                A <a>statement</a> may be one of three possible types: <a>effect</a>, <a>do</a>, or <a>fork</a>.
+                A <a>statement</a> may be a non-terminal such as <a>do</a> or <a>fork</a>, or a terminal such as <a>effect</a>.
                 Optionally, statements may contain <a>condition</a>, <a>await</a>, or <a>once</a> flags.
             </p>
             <blockquote>
@@ -533,7 +566,7 @@
         <section>
             <h2><code><dfn>act</dfn></code></h2>
             <p>
-                An <a>act</a> represents an action specified by evaluating the expression. The result is interpreted by a client.
+                An <a>act</a> represents an action specified by evaluating the expression. The result is interpreted by a client. 
             </p>
             <blockquote>
 	            <pre>
@@ -570,12 +603,19 @@
             <pre class="example" title="set">
                 "@set": "`is_user_greeted`", "val": true
             </pre>
+	    <pre class="example" title="set (unpack)">
+                "@set": ["", "`is_user_greeted`", "`num_questions`"], "val": ["", true, 7]
+            </pre>
+
         </section>
 
         <section>
             <h2><code><dfn>def</dfn></code></h2>
             <p>
-                A <a>def</a> defines a new <a>expression</a> operator that can be used later in the code.
+              A <a>def</a> defines a new <a>expression</a> operator that can be used later in the code.
+	      A new operator is created by specifying the operator's name followed by argument names in a list.
+	      These argument names are valid only for this scope, and may shadow global variables.
+	      The result is returned by a <a>pop</a> statement.
             </p>
             <blockquote>
 	            <pre>
@@ -606,10 +646,10 @@
                 <figcaption>Run</figcaption>
             </figure>
             <pre class="example" title="run">
-                "@run": "Outro"
+                "@run": "`Outro`"
             </pre>
             <pre class="example" title="run with args">
-                "@run": "Question", "args": ["", "`What's the largest planet?`", "`Jupiter`"]
+                "@run": "`Question`", "args": ["", "`What's the largest planet?`", "`Jupiter`"]
             </pre>
         </section>
 
@@ -651,6 +691,7 @@
             <pre class="example" title="pop">
                 "@pop": true
             </pre>
+
         </section>
 
         <section>
@@ -803,7 +844,7 @@
     <pre class="example" title="Greet and Ask Question">
         {
           "scheme": {"depth":  2}, "@fork": [
-            {"if": ["?", "`greeted`"], "@set": "`greeted`", "val": false},
+            {"if": ["!", ["exists", "`greeted`"]], "@set": "`greeted`", "val": false},
             {"if": ["==", "greeted", false], "@do": [
               {"@act": "`hello`"},
               {"@set": "`greeted`", "val": true}
@@ -821,7 +862,7 @@
     <pre class="example" title="Planet Trivia">
         {
           "@fork": [
-            {"@do": [
+            {"if": ["!", ["exists", "`Init`"]], "@do": [
               {"@set": "`Init`", "val": true},
               {"@set": "`Wrong-Counter`", "val": 0},
               {"@set": "`Is-Hint1-Given`", "val": false},
@@ -839,9 +880,9 @@
               {"@set": "`Hint2`", "val": "`It's name begins with the letter J`"},
               {"@set": "`Answer`", "val": "`The biggest planet is Jupiter`"},
               {"@set": "`Hint-Announcement`", "val": "`Here's a hint`"}
-            ], "if": ["?", "`Init`"]},
+            ]},
             {"@fork": [
-              {"@do": [
+              {"if": ["&&", ["<=", "Wrong-Counter", 3], ["!", "Is-Answer-Given"]], "@do": [
                 {"@act": "Question"},
                 {"@fork": [
                   {"if": ["input", "CA"], "@do": [
@@ -860,21 +901,21 @@
                     {"@set": "`Wrong-Counter`", "val":  ["+", 1, "Wrong-Counter"]}
                   ]}
                 ], "await": ["input"]}
-              ], "if": ["&&", ["<=", "Wrong-Counter", 3], ["!", "Is-Answer-Given"]]},
-              {"@do": [
+              ]},
+              {"if": ["&&", ["!", "Is-Hint1-Given"], ["==", "Wrong-Counter", 1]], "@do": [
                 {"@act": "Hint-Announcement"},
                 {"@act": "Hint1"},
                 {"@set": "`Is-Hint1-Given`", "val": true}
-              ], "if": ["&&", ["!", "Is-Hint1-Given"], ["==", "Wrong-Counter", 1]]},
-              {"@do": [
+              ]},
+              {"if": ["&&", ["!", "Is-Hint2-Given"], ["==", "Wrong-Counter", 2]], "@do": [
                 {"@act": "Hint-Announcement"},
                 {"@act": "Hint2"},
                 {"@set": "`Is-Hint2-Given`", "val": true}
-              ], "if": ["&&", ["!", "Is-Hint2-Given"], ["==", "Wrong-Counter", 2]]},
-              {"@do": [
+              ]},
+              {"if": ["&&", ["!", "Is-Answer-Given"], ["==", "Wrong-Counter", 3]], "@do": [
                 {"@act": "Answer"},
                 {"@set": "`Is-Answer-Given`", "val": true}
-              ], "if": ["&&", ["!", "Is-Answer-Given"], ["==", "Wrong-Counter", 3]]}
+              ]}
             ], "scheme": {"depth": 3}}
           ]
         }
