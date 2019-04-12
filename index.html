@@ -493,6 +493,7 @@
             <p>
                 A <a>condition</a> is a boolean expression that runs the statement if the expression evaluates to true.
                 A condition check takes priority over other parts of the statement.
+		If a statement does not explicitly contain a condition, then that statement's condition is trivially true.
             </p>
             <blockquote>
 	            <pre>
@@ -720,7 +721,7 @@
         <section>
             <h2><code><dfn>fork</dfn></code></h2>
             <p>
-                A <a>fork</a> statement specifies the branch-like behavior of the list of statements that follow.
+                A <a>fork</a> statement specifies the branch-like behavior of the list of statements that follow. Only one is chosen, and the strategy to pick one may be provided using the <a>scheme</a> attribute. By default, a greedy scheme is used, meaning the first statement whose <a>condition</a> is met will be chosen.
             </p>
             <blockquote>
 	            <pre>
@@ -767,11 +768,14 @@
     <p>
         This section details DMPL conforming example programs.
     </p>
+    <p>The following sends "hello world" to the action realizer.
     <pre class="example" title="Hello World!">
         {
           "@act": "`hello world`"
         }
     </pre>
+    <br />
+    <p>Two actions can be sent sequentially.</p>
     <pre class="example" title="Do-statement">
         {
           "@do": [
@@ -780,6 +784,8 @@
           ]
         }
     </pre>
+    <br />
+    <p>Fork statements allow branching logic.</p>
     <pre class="example" title="If-Else Control Flow">
         {
           "@fork": [
@@ -788,6 +794,8 @@
           ]
         }
     </pre>
+    <br />
+    <p>Variables can be set and accessed like so.</p>
     <pre class="example" title="Variables">
         {
           "@do": [
@@ -797,6 +805,8 @@
           ]
         }
     </pre>
+    <br />
+    <p>Here we define a new expression called <code>inc</code> which takes an argument called <code>x</code>.</p>
     <pre class="example" title="Define New Expression">
         {
           "@do": [
@@ -805,6 +815,8 @@
           ]
         }
     </pre>
+    <br />
+    <p>The set statement allows unpacking a list.</p>
     <pre class="example" title="Unpacking an Array">
         {
           "@do": [
@@ -813,6 +825,8 @@
           ]
         }
     </pre>
+    <br />
+    <p>Run an external file and pass in arguments. The return value can be considered in the following fork statement.</p>
     <pre class="example" title="Running Components">
         {"@do":
           {"@run": "`Question`", "args": ["", "`What's the biggest planet?`", "`Jupiter`"]},
@@ -822,6 +836,8 @@
           ]}
         }
     </pre>
+    <br />
+    <p>Expressions and variabels may be imported from other files.</p>
     <pre class="example" title="Importing Expressions">
         {
           "@do": [
@@ -830,6 +846,8 @@
           ]
         }
     </pre>
+    <br />
+    <p>To halt until a user input is supplied, the await flag on a fork may be used.</p>
     <pre class="example" title="Input Handling">
         {
           "@do": [
@@ -841,15 +859,17 @@
           ]
         }
     </pre>
+    <br />
+    <p>More immersive dialogue can be achieved by setting and checking variables, such as <code>greeted</code>.</p>
     <pre class="example" title="Greet and Ask Question">
         {
           "scheme": {"depth":  2}, "@fork": [
             {"if": ["!", ["exists", "`greeted`"]], "@set": "`greeted`", "val": false},
-            {"if": ["==", "greeted", false], "@do": [
+            {"if": ["!", "greeted"], "@do": [
               {"@act": "`hello`"},
               {"@set": "`greeted`", "val": true}
             ]},
-            {"if": ["==", "greeted", true], "@do": [
+            {"if": "greeted", "@do": [
               {"@act": "`how are you?`"},
               {"@set": "`asked_feelings`", "val": true},
               {"await": ["input"], "@fork": [
@@ -859,6 +879,8 @@
           ]
         }
     </pre>
+    <br />
+    <p>More complete question and answering scenarios may be constructed.</p>
     <pre class="example" title="Planet Trivia">
         {
           "@fork": [
@@ -920,6 +942,21 @@
           ]
         }
     </pre>
+    <br />
+    <p>Here's how to handle global interruptions from the user.</p>
+    <pre class="example" title="Interruptions">
+      {"scheme": {depth: 1}, "@fork": [
+        {"@do": [
+          {"@act": "`What's your favorite color?`"},
+          {"await": ["input"], "@fork": [
+            {"if": ["input", "`red`"], "@act": "`That's my favorite color, too!`"}
+            {"@act": "`I've never heard of it`"}  
+          ]}
+        ]},
+        {"if": ["input", "`want to quit`"], "@act": "bye"}
+      ]}
+    </pre>
+
 </section>
 
 
@@ -971,80 +1008,6 @@
         using <a href="https://bit.ly/2IWdz3b">EBNF</a>. The railroad diagrams were genereated using
         <a href="https://bit.ly/2Tk2EVX">raildroad diagram generator.</a>
     </p>
-</section>
-
-
-<section>
-    <h2>Appendix</h2>
-    <p>
-        EBNF Grammar.
-        The extended Backus-Naur form (EBNF) grammar of the Language Syntax is fully defined below.
-    </p>
-
-    <pre class="abnf">
-        /* Literal */
-            literal ::= string | number | boolean | 'null'
-
-        /* Boolean */
-            boolean ::= 'true' | 'false'
-
-        /* String */
-            name ::= [http://www.w3.org/TR/xml-names/#NT-NCName]
-            quote ::= '&quot;'
-            tick ::= '`'
-            quote_start ::= quote tick
-            quote_close ::= tick quote
-            string ::= quote_start name quote_close
-
-        /* Number */
-            digit ::= [0-9]
-            number ::= ('-')? ((digit+ '.') | ('.' digit+) | digit+ | (digit+ '.' digit+))
-
-        /* Variable */
-            variable ::= qt name qt
-
-        /* Dictionary */
-            pairs ::= (string | variable) pair_delim expression (list_delim pairs)?
-            dictionary ::= block_start pairs block_end
-
-        /* Expression */
-            expression ::= literal
-            | variable
-            | dictionary
-            | '['
-            (literal | variable)
-            (',' expression)*
-            ']'
-
-        /* Statement */
-            statement ::= block_start (condition list_delim)? (await list_delim)? (once list_delim)? (effect | do | fork) block_end
-            condition ::= '"if"' pair_delim expression
-            await ::= '"await"' ':' expression
-            once ::= '"once"' ':' boolean
-
-        /* Terminal */
-            effect ::= act | set | def | run | use | pop
-            act ::= '"@act"' ':' expression
-            set ::= '"@set"' ':' expression ',' '"val"' ':' expression
-            def ::= '"@def"' ':' expression ',' '"val"' ':' statement
-            run ::= '"@run"' ':' expression (',' '"args"' ':' expression)?
-            use ::= '"@use"' ':' expression (',' '"import"' ':' expression)?
-            pop ::= '"@pop"' ':' expression
-
-        /* AND */
-            do ::= '"@do"' ':' '[' (statement (',' statement)*)? ']'
-
-        /* OR */
-            fork ::= '"@fork"' ':' '[' ( statement (',' statement)* )? ']' (',' scheme)?
-            scheme ::= '"scheme"' ':' expression
-
-        <?TOKENS?>
-        /*TOKENS*/
-            block_start ::= '{'
-            block_end ::= '}'
-            pair_delim ::= ':'
-            list_delim ::= ','
-    </pre>
 </section>
 
 
