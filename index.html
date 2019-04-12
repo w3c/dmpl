@@ -12,7 +12,7 @@
             wg: "Conversational Interfaces Working Group",
             wgURI: "https://www.w3.org/community/conv/",
             wgPublicList: "public-conv",
-            specStatus: "CG-DRAFT",
+            specStatus: "CG-FINAL",
             shortName: "dmpl",
             editors: [{
                 name: "Nishant Shukla"
@@ -24,7 +24,7 @@
             }],
             edDraftURI: "https://github.com/w3c/dmpl",
             addSectionLinks: true,
-            isPreview: true,
+            isPreview: false,
             lint: {
                 "check-punctuation": true
             }
@@ -35,7 +35,7 @@
 
 <section id='abstract'>
     <p>
-        This specification defines the final draft of DMPL, which defines the behavior of interactive systems in a formal language.
+        This specification defines the syntax and semantics of a dialogue manager programming language (DMPL).
         The user specifies the states (i.e. fluents), how they change (i.e. actions), and which are preferred (i.e. utility).
         These three components characterize a task, so we call DMPL a task-oriented programming language.
         The interpreter of the language should resolve the task by identifying and executing actions that maximize utility.
@@ -49,18 +49,17 @@
 <section>
     <h2>Introduction</h2>
 
-    We decouple the representation of a task from its execution.
-    Conversational interfaces employ artificial intelligence at varying levels: finite state machines, simulation engines, or reinforcement learning systems.
-    This document concretely lays down the representation syntax, without going into the execution details.
+    This specification aims to decouple the representation of dialogue from its execution.
+    For example, conversational interfaces employ artificial intelligence at varying levels: finite state machines, path planning, or reinforcement learning systems.
+    Regardless of the execution, the underlying representation can be agreed upon.
     That way, a content writer may author and share conversational experiences without being distracted by the underlying runtime.
     <section>
         <h2>Scope</h2>
         <i>This section is informative.</i>
         <p>
-            This document is limited to specifying the syntax for a general purpose <b>task-oriented</b> language for
-            interactive agents. This document is targeted at applications that would be expected to be used by content
-            authors on a frequent basis. One example application of DMPL is an authoring tool to be used on a regular
-            basis by a non-technical content writer.
+            This document is limited to specifying the syntax for a <dfn>task-oriented</dfn> language for interactive agents.
+	    It's targeted towards exporting and importing dialogue content authored by writers.
+	    One example application of DMPL is an authoring tool to be used on a regular basis by a non-technical content writer.
         </p>
     </section>
     <section>
@@ -108,6 +107,7 @@
                 <td>Utility</td>
             </tr>
         </table>
+
     </section>
 </section>
 
@@ -116,8 +116,7 @@
     <h2>Language Syntax</h2>
     <i>This section is normative.</i>
     <p>
-        This section of the document defines the types used within this specification using <a href="">
-        EBNF</a> notation with corresponding <a href="https://bit.ly/2Tk2EVX">railroad diagrams</a>.
+        This section of the document defines the types used within this specification using EBNF notation with corresponding <a href="https://www.bottlecaps.de/rr/ui">railroad diagrams</a>.
     </p>
 
     <section>
