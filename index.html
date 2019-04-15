@@ -741,7 +741,7 @@
                 <img src="diagrams/fork.png" alt="Fork railroad diagram">
                 <figcaption>Fork</figcaption>
             </figure>
-		<p>When no scheme is provided, a fork is essentially the traditional if/elif/else logical flow:</p>
+		<p>When no scheme is provided, a fork is essentially the traditional <code>if</code>/<code>elif</code>/<code>else</code> logical flow:</p>
             <pre class="example" title="fork">
                 "@fork": [
                   {"if": "is_user_greeted", "@act": "a"},
@@ -749,15 +749,15 @@
                   {"@act": "c"}
                 ]
             </pre>
-		<p>Providing a scheme allows stochastic behavior to take place.</p>
-	    <pre class="example" title="fork with scheme of bounded depth-first-search">
-                "scheme": {"depth": 3}, "@fork": [
-                  {"@set": "do_action_1", "val": "true"},
-                  {"@set": "do_action_2", "val": "true"},
-                  {"@set": "do_action_3", "val": "true"},
-		  {"if": "is_entry_condition_met", "@set": "do_action_4", "val": "true"},
-		  {"if": false, "@act": "`never reached`"}
-                ]
+		<p>Providing a scheme allows stochastic behavior to take place:</p>
+	    <pre class="example" title="fork with scheme">
+"scheme": {"depth": 3}, "@fork": [
+  {"@set": "do_action_1", "val": "true"},
+  {"@set": "do_action_2", "val": "true"},
+  {"@set": "do_action_3", "val": "true"},
+  {"if": "is_entry_condition_met", "@set": "do_action_4", "val": "true"},
+  {"if": false, "@act": "`never reached`"}
+]
             </pre>
         </section>
 
