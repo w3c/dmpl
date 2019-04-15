@@ -52,8 +52,8 @@
     This specification aims to decouple the representation of dialogue from its execution.
     For example, conversational interfaces employ artificial intelligence in different ways: 
 	finite state machines, path planning, or reinforcement learning systems.
-    Regardless of the execution framework, the underlying representation may be shared.
-    A agreed upon representation of dialogue allows content writers to author and share conversational experiences
+    Regardless of the execution framework, the logical representation may be shared.
+    An agreed upon representation of dialogue allows content writers to author and share conversational experiences
 	without being distracted by the underlying runtime.
     <section>
         <h2>Scope</h2>
@@ -61,7 +61,8 @@
         <p>
             This document is limited to specifying the syntax and semantics for a <dfn>task-oriented</dfn> language for interactive behavior.
 	    One example application of DMPL is an authoring tool to be used on a regular basis by a non-technical content writer.
-	    Another use-case of DMPL is exporting and importing dialogue content authored by writers in other web platforms.
+	    Another use-case of DMPL is exporting and importing dialogue content authored by writers from different web platforms.
+	    Technologies closely related to these use-cases are in scope.
         </p>
     </section>
     <section>
@@ -279,6 +280,10 @@
             </figure>
             <pre class="example" title="variable">
                 "num_correct_answers" // => 3
+            </pre>
+	    A <a>variable</a> should not be confused with a <a>string</a>, which uses backticks (<code>`</code>) like so:  
+	    <pre class="example" title="string uses backticks">
+                "`num_correct_answers`" // => "num_correct_answers"
             </pre>
         </section>
 
