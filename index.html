@@ -1007,14 +1007,32 @@
         <h2>Artificial Intelligence Modelling Language (AIML)</h2>
         <p>
             AIML tightly couples dialogue logic with natural language processing (NLP).
+	    As a result, authoring complicated dialogue systems in AIML requires authors to create an extensive knowledge-base,
+            requiring a large number of rules that need to be crafted in order to imitate a natural conversation. 
+            This often requires domain expertise in order to capture the intricate nuances associated with open-ended dialogue.
             DMPL, on the other hand, is a general representation for dialogue flow and control without text pattern matching rules.
         </p>
     </section>
     <section>
         <h2>ChatScript</h2>
+	<p>
+	ChatScript incorporates stronger pattern matching than AIML by using NLU to find the best topic 
+	match instead of the best pattern match for an input.
+	To incorporate NLU, ChatScript packages a large database of concepts, which are sets of synonyms.
+	Defining custom concepts is easily accomplished, but requires careful design in order to avoid 
+        being matched with already existing concepts, and to avoid have disjoint inputs being matched with the same concept. 
+	DMPL modularizes the NLU, relieving content-writers from having to write complex pattern matching expressions.
+	</p>
     </section>
     <section>
         <h2>RiveScript</h2>
+	<p>
+	 RivesSript mainly concerns itself with fetching a user's input message, and leaving everything else to the content writer. 
+	 It's designed to extend and simplify AIML but still has the overhead of having to write complex
+            pattern matching expressions limiting the variability and scope of the dialogue that can be produced.
+            DMPL decouples the need to write complicated pattern matching rules, and instead uses utility functions
+            to both drive dialogue and respond to the user's input accordingly.
+	</p>
     </section>
     <section>
         <h2>Planning Domain Definition Language (PDDL)</h2>
