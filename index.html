@@ -271,7 +271,7 @@
         <section>
             <h2><code><dfn>variable</dfn></code></h2>
             <p>
-                A <a>variable</a> is a named reference to a <a>literal</a>, <a>dictionary</a>, or <a>expression</a>.
+                A <a>variable</a> is a named reference to the result of evaluating an <a>expression</a>.
             </p>
             <blockquote>
                     <pre>
@@ -296,6 +296,7 @@
             <p>
                 A <a>dictionary</a> is a structure that maps data in key-value pairs.
                 The keys and values are all evaluated.
+                The keys can be either strings or variables that evaluate to strings.
             </p>
             <blockquote>
                 <pre>
@@ -318,6 +319,7 @@
                 An <a>expression</a> may be evaluated, and that result is stored in memory to be referenced later.
                 An expression may be denoted by a JSON array, in which case it is also called a <dfn>function</dfn>.
                 The first element of the array represents the operator of the <a>function</a>.
+                The operator can be either a string or a variable that evaluates to a string.
                 All remaining elements of the array constitute the operands.
             </p>
             <blockquote>
@@ -604,7 +606,12 @@
         <section>
             <h2><code><dfn>set</dfn></code></h2>
             <p>
-                A <a>set</a> updates the value of the <a>variable</a>, where the name of the variable is specified by evaluating the expression.
+                A <a>set</a> updates the values of the <a>variables</a>,
+                where the names of the variables and the updated values are specified by evaluating the corresponding expressions.
+                The expression specifying the names of the variables is allowed to contain variables
+                (although static code analysis and possible optimizations would be more difficult),
+                and must evaluate to a string, a list consisting of only strings, or a dictionary consisting of only strings
+
             </p>
             <blockquote>
 	            <pre>
@@ -627,10 +634,11 @@
         <section>
             <h2><code><dfn>def</dfn></code></h2>
             <p>
-              A <a>def</a> defines a new <a>expression</a> operator that can be used later in the code.
-	      A new operator is created by specifying the operator's name followed by argument names in a list.
-	      These argument names are valid only for this scope, and may shadow global variables.
-	      The result is returned by a <a>pop</a> statement.
+                A <a>def</a> defines a new <a>expression</a> operator that can be used later in the code.
+                The signature of the new <a>expression</a> operator is specified by an expression that must evaluate to a list of strings,
+                which maps to the operator name followed by the argument names.
+                These argument names are valid only for this scope, and may shadow global variables.
+                The result is returned by a <a>pop</a> statement.
             </p>
             <blockquote>
 	            <pre>
@@ -649,7 +657,9 @@
         <section>
             <h2><code><dfn>run</dfn></code></h2>
             <p>
-                A <a>run</a> calls DMPL code in another file, optionally passing in arguments. The current variables stored in memory are remembered later.
+                A <a>run</a> calls DMPL code in another component, optionally passing in arguments.
+                The name of the called component is specified by an expression that must evaluate to a string.
+                The current variables stored in memory are remembered later.
             </p>
             <blockquote>
 	            <pre>
@@ -672,6 +682,7 @@
             <h2><code><dfn>use</dfn></code></h2>
             <p>
                 A <a>use</a> imports <a>variables</a> and expression operators defined in another component.
+                The name of the imported component is specified by an expression that must evaluate to a string.
                 The variable and expression operator names can be optionally specified, or all variables and expression operators will be imported.
                 It's similar to <code>from os import path</code> notation in Python.
             </p>
@@ -735,11 +746,11 @@
         <section>
             <h2><code><dfn>fork</dfn></code></h2>
             <p>
-                A <a>fork</a> statement specifies the branch-like behavior of the list of statements that follow. 
-		Only one is chosen, and the strategy to pick one may be provided using the <a>scheme</a> attribute. 
-		By default, a greedy scheme is used, meaning the first statement whose <a>condition</a> is met will be chosen.
-		More complicated schemes, such as depth-first-search or Monte Carlo Tree Search may be indicated,
-		    leaving the implementation up to the interpreter.
+                A <a>fork</a> statement specifies the branch-like behavior of the list of statements that follow.
+                Only one is chosen, and the strategy to pick one may be provided using the <a>scheme</a> attribute.
+                By default, a greedy scheme is used, meaning the first statement whose <a>condition</a> is met will be chosen.
+                More complicated schemes, such as depth-first-search or Monte Carlo Tree Search may be indicated,
+                leaving the implementation up to the interpreter.
             </p>
             <blockquote>
 	            <pre>
@@ -761,10 +772,10 @@
 		<p>Providing a scheme allows stochastic behavior to take place:</p>
 	    <pre class="example" title="fork with scheme">
 "scheme": {"depth": 3}, "@fork": [
-  {"@set": "do_action_1", "val": "true"},
-  {"@set": "do_action_2", "val": "true"},
-  {"@set": "do_action_3", "val": "true"},
-  {"if": "is_entry_condition_met", "@set": "do_action_4", "val": "true"},
+  {"@set": "`do_action_1`", "val": "true"},
+  {"@set": "`do_action_2`", "val": "true"},
+  {"@set": "`do_action_3`", "val": "true"},
+  {"if": "is_entry_condition_met", "@set": "`do_action_4`", "val": "true"},
   {"if": false, "@act": "`never reached`"}
 ]
             </pre>
