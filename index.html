@@ -21,9 +21,11 @@
             }],
             authors: [{
              name: "Nelson Solano",
+             url: "https://www.linkedin.com/in/nelson-solano-24a935126",
 	     w3cid: 113168
             }, {
              name: "Victor Zhang",
+             url: "https://www.linkedin.com/in/victor-zhang-a8b303108",
 	     w3cid: 113469
             }],
             edDraftURI: "https://github.com/w3c/dmpl",
@@ -73,7 +75,7 @@
         <h2>Goals and Motivation</h2>
         <i>This section is informative.</i>
         <p>
-            DMPL is a task-oriented programming language, which may be better explained by extending <a href="https://bit.ly/2Huf6fG">Microsoft's Function
+            DMPL is a task-oriented programming language, which may be better explained by extending <a href="https://bit.ly/2Huf6fG">Microsoft's Functional
             Programming vs. Imperative Programming</a> table, shown below.
         </p>
         <table id="comparison-table">
@@ -123,7 +125,9 @@
     <h2>Language Syntax</h2>
     <i>This section is normative.</i>
     <p>
-        This section of the document defines the types used within this specification using EBNF notation with corresponding <a href="https://www.bottlecaps.de/rr/ui">railroad diagrams</a>.
+        This section of the document defines the types used within this specification using
+        <a href="https://bit.ly/2g2U4aa">EBNF</a> notation with corresponding
+        <a href="https://www.bottlecaps.de/rr/ui">railroad diagrams</a>.
     </p>
 
     <section>
@@ -165,7 +169,7 @@
         <section>
             <h2><code><dfn>name</dfn></code></h2>
             <p>
-                A <a>name</a> is a sequence of characters conforming to those in the XML standard.
+                A <a>name</a> is a sequence of characters conforming to those in the [[XML-NAMES]] standard.
             </p>
             <blockquote>
 	            <pre>
@@ -317,7 +321,7 @@
             <h2><code><dfn>expression</dfn></code></h2>
             <p>
                 An <a>expression</a> may be evaluated, and that result is stored in memory to be referenced later.
-                An expression may be denoted by a JSON array, in which case it is also called a <dfn>function</dfn>.
+                An expression may be denoted by a JSON array [[RFC7159]], in which case it is also called a <dfn>function</dfn>.
                 The first element of the array represents the operator of the <a>function</a>.
                 The operator can be either a string or a variable that evaluates to a string.
                 All remaining elements of the array constitute the operands.
@@ -385,7 +389,7 @@
 		<tr>
                     <th>list</th>
                     <td><pre>"enumFromThenTo"</pre></td>
-                    <td><pre class="example">["enumFromThenTo", 1, 3, 10] // => [1, 3, 5, 7, 9]</pre></td>
+                    <td><pre class="example">["enumFromThenTo", 1, 2, 10] // => [1, 3, 5, 7, 9]</pre></td>
                 </tr>
                 <tr>
                     <th><a>boolean</a></th>
@@ -1052,19 +1056,5 @@
         </ul>
     </section>
 </section>
-
-<section>
-    <h2>References</h2>
-    <i>This section is informative.</i>
-    <p>
-        The primitive data types used and defined within this spec were influenced by <a href="https://bit.ly/2H35fx3">
-        ISO/IEC 11404.</a> The conforming DMPL JSON syntax was influenced by <a href="http://json.org/">json.org</a> and
-        <a href="https://jsonapi.org/">jsonapi.org</a>. The JSON Syntax defined within this document was developed
-        using <a href="https://bit.ly/2IWdz3b">EBNF</a>. The railroad diagrams were genereated using
-        <a href="https://bit.ly/2Tk2EVX">raildroad diagram generator.</a>
-    </p>
-</section>
-
-
 </body>
 </html>
