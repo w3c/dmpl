@@ -41,10 +41,10 @@
 
 <section id='abstract'>
     <p>
-        This specification defines the syntax and semantics of a dialogue manager programming language (DMPL).
-        The user specifies the states (i.e. fluents), how they change (i.e. actions), and which are preferred (i.e. utility).
+        This specification defines the syntax and semantics of a language for defining the behavior of interactive dialogue.
+        It formalizes the representation of states (i.e. fluents), how they change (i.e. actions), and which are preferred (i.e. utility).
         These three components characterize a task, so we call DMPL a task-oriented programming language.
-        The interpreter of the language should resolve the task by identifying and executing actions that maximize utility.
+        The interpreter of the language resolves the task by identifying and executing actions that maximize utility.
     </p>
 </section>
 
@@ -66,9 +66,9 @@
         <i>This section is informative.</i>
         <p>
             This document is limited to specifying the syntax and semantics for a <dfn>task-oriented</dfn> language for interactive behavior.
-	    One example application of DMPL is an authoring tool to be used on a regular basis by a non-technical content writer.
-	    Another use-case of DMPL is exporting and importing dialogue content authored by writers from different web platforms.
-	    Technologies closely related to these use-cases are in scope.
+            One example application of DMPL is an intermediate represenation of content written in authoring tools for non-technical users.
+            Another use-case of DMPL is exporting and importing dialogue content authored by writers from different web platforms.
+            Technologies closely related to these use-cases are in scope.
         </p>
     </section>
     <section>
@@ -116,8 +116,12 @@
                 <td>Utility</td>
             </tr>
         </table>
-
     </section>
+
+    <p>
+        The runtime shall evaluate DMPL in an infinite loop, similar to game-loops inherent in most game engines.
+    </p>  
+
 </section>
 
 
@@ -349,7 +353,12 @@
                 <tr>
                     <th><a>string</a></th>
                     <td><pre>"++"</pre></td>
-                    <td><pre class="example">["++", "`hello `", "`world`"] // => "`hello world`"</pre></td>
+                    <td><pre class="example">["++", "`hello `", "`world`"] // => "hello world"</pre></td>
+                </tr>
+                <tr>
+                    <th><a>string</a></th>
+                    <td><pre>"to_str"</pre></td>
+                    <td><pre class="example">["to_str", 4] // => "4"</pre></td>
                 </tr>
                 <tr>
                     <th><a>number</a></th>
@@ -373,23 +382,96 @@
                 </tr>
                 <tr>
                     <th><a>number</a></th>
+                    <td><pre>"//"</pre></td>
+                    <td><pre class="example">["//", 1, 2] // => 0</pre></td>
+                </tr>
+                <tr>
+                    <th><a>number</a></th>
                     <td><pre>"%"</pre></td>
                     <td><pre class="example">["%", 168, 2] // => 0</pre></td>
                 </tr>
-		<tr>
+                <tr>
+                    <th><a>number</a></th>
+                    <td><pre>"to_num"</pre></td>
+                    <td><pre class="example">["to_num", "`4`"] // => 4</pre></td>
+                </tr>
+                <tr>
+                    <th><a>number</a></th>
+                    <td><pre>"len"</pre></td>
+                    <td><pre class="example">["len", ["", 1, 2, 3]] // => 3</pre></td>
+                </tr>
+                <tr>
+                    <th><a>number</a></th>
+                    <td><pre>"floor"</pre></td>
+                    <td><pre class="example">["floor", 1.5] // => 1</pre></td>
+                </tr>
+		        <tr>
                     <th>list</th>
                     <td><pre>""</pre></td>
                     <td><pre class="example">["", 1, 2, 3, 4, 5] // => [1, 2, 3, 4, 5]</pre></td>
                 </tr>
-		<tr>
+		        <tr>
                     <th>list</th>
                     <td><pre>"enumFromTo"</pre></td>
                     <td><pre class="example">["enumFromTo", 1, 5] // => [1, 2, 3, 4, 5]</pre></td>
                 </tr>
-		<tr>
+		        <tr>
                     <th>list</th>
                     <td><pre>"enumFromThenTo"</pre></td>
                     <td><pre class="example">["enumFromThenTo", 1, 2, 10] // => [1, 3, 5, 7, 9]</pre></td>
+                </tr>
+                <tr>
+                    <th>list</th>
+                    <td><pre>"range"</pre></td>
+                    <td><pre class="example">["range", 1, 5] // => [1, 2, 3, 4]</pre></td>
+                </tr>
+                <tr>
+                    <th>list</th>
+                    <td><pre>"map"</pre></td>
+                    <td>
+                        <pre class="example">
+                            ["map", "to_str", ["", 1, 2, 3]] // => ["1", "2", "3"]
+                        </pre>
+                        <pre class="example">
+                            ["map", "+", ["", 1, 2, 3], ["", 4, 5, 6]] // => [5, 7, 9]
+                        </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <th>list</th>
+                    <td><pre>"foldl"</pre></td>
+                    <td>
+                        <pre class="example">
+                            ["foldl", "+", 0, ["", 1, 2, 3]] // => 6
+                        </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <th>list</th>
+                    <td><pre>"sort"</pre></td>
+                    <td>
+                        <pre class="example">
+                            ["sort", ["", 1, 3, 2]] // => [1, 2, 3]
+                        </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <th>list</th>
+                    <td><pre>"shuffle"</pre></td>
+                    <td>
+                        <pre class="example">
+                            ["shuffle", ["", 1, 2, 3]] // => [1, 3, 2] randomly shuffled
+                        </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <th>list</th>
+                    <td><pre>"reverse"</pre></td>
+                    <td>
+                        <pre class="example">
+                            ["reverse", ["", 1, 2, 3]] // => [3, 2, 1]
+                        </pre>
+                    </td>
                 </tr>
                 <tr>
                     <th><a>boolean</a></th>
@@ -432,7 +514,7 @@
                     <td><pre>"||"</pre></td>
                     <td><pre class="example">["||", true, false] // => true</pre></td>
                 </tr>
-		<tr>
+		        <tr>
                     <th><a>boolean</a></th>
                     <td><pre>"!"</pre></td>
                     <td><pre class="example">["!", false] // => true</pre></td>
@@ -447,10 +529,10 @@
                     <td><pre>"input"</pre></td>
                     <td>
                         <pre class="example">["input"] // => true if there's an input</pre>
-                        <pre class="example">["input", "yes"] // => true if there's an input and it equals "`yes`"</pre>
+                        <pre class="example">["input", "`yes`"] // => true if there's an input and it equals "yes"</pre>
                     </td>
                 </tr>
-		<tr>
+		        <tr>
                     <th><a>boolean</a></th>
                     <td><pre>"return"</pre></td>
                     <td>
@@ -459,25 +541,53 @@
                 </tr>
                 <tr>
                     <th><a>boolean</a></th>
-                    <td><pre>"exists"</pre></td>
-                    <td><pre class="example">["exists", "`is_greeted`"] // => false if variable not initialized</pre></td>
+                    <td><pre>"?"</pre></td>
+                    <td><pre class="example">["?", "`is_greeted`"] // => true if variable defined</pre></td>
                 </tr>
-		<tr>
+                <tr>
+                    <th>dynamic</th>
+                    <td><pre>"in"</pre></td>
+                    <td>
+                        <pre class="example">["in", 1, ["", 1, 2, 3]] // => true</pre>
+                    </td>
+                </tr>
+		        <tr>
                     <th>dynamic</th>
                     <td><pre>"get"</pre></td>
                     <td>
                         <pre class="example">["get", 0, ["", 1, 2, 3]] // => 1</pre>
-		        <pre class="example">["get", "`a`", {"`a`": 1}] // => 1</pre>
+		                <pre class="example">["get", "`a`", {"`a`": 1}] // => 1</pre>
                     </td>
                 </tr>
-		<tr>
+		        <tr>
                     <th>dynamic</th>
                     <td><pre>"pick"</pre></td>
                     <td>
                         <pre class="example">["pick", ["", 1, 2, 3]] // => 1, 2, or 3 uniformly at random</pre>
                     </td>
                 </tr>
-
+                <tr>
+                    <th>dynamic</th>
+                    <td><pre>"patch"</pre></td>
+                    <td>
+                        <pre class="example">["patch", {"`a`": 1, "`b`": 2}, {"`a`": 2}] // => {a: 2, b: 2}</pre>
+                        Reference: <a href="https://tools.ietf.org/html/rfc7396" target="_blank">RFC 7386</a>
+                    </td>
+                </tr>
+                <tr>
+                    <th>dynamic</th>
+                    <td><pre>"edit"</pre></td>
+                    <td>
+                        <pre class="example">["edit", {"`a`": 1}, 2, "`a`"] // => {a: 2}</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <th>dynamic</th>
+                    <td><pre>"from_list"</pre></td>
+                    <td>
+                        <pre class="example">["from_list", ["", ["", "`a`", 1], ["", "`b`", 2]]] // => {a: 1, b: 2}</pre>
+                    </td>
+                </tr>
             </table>
         </section>
     </section>
@@ -509,7 +619,7 @@
             <p>
                 A <a>condition</a> is a boolean expression that runs the statement if the expression evaluates to true.
                 A condition check takes priority over other parts of the statement.
-		If a statement does not explicitly contain a condition, then that statement's condition is trivially true.
+		        If a statement does not explicitly contain a condition, then that statement's condition is trivially true.
             </p>
             <blockquote>
 	            <pre>
@@ -547,7 +657,8 @@
         <section>
             <h2><code><dfn>once</dfn></code></h2>
             <p>
-                A <a>once</a> flag specified whether the statement can only be run once.
+                A <a>once</a> flag specifies whether the statement can only be run once.
+                The statement is then ignored in all subsequent instances.
                 By default, the once flag is set to false.
             </p>
             <blockquote>
@@ -583,11 +694,11 @@
         <section>
             <h2><code><dfn>act</dfn></code></h2>
             <p>
-                An <a>act</a> represents an action specified by evaluating the expression. 
-		The result is interpreted by a client. 
-		For example, the payload of the <a>act</a> statement may be represented using 
-		    <a href="http://www.mindmakers.org/projects/bml-1-0/wiki">Behavior Markup Language (BML)</a>.
-		The client is then responsible for realizing the behavior defined in the <a>act</a> message.
+                An <a>act</a> represents an action for the client to realize.
+                The expression is evaluated before being sent out to the client. 
+		        For example, the payload of the <a>act</a> statement may be represented using 
+		        <a href="http://www.mindmakers.org/projects/bml-1-0/wiki">Behavior Markup Language (BML)</a>.
+		        The client is then responsible for realizing the behavior defined in the <a>act</a> message.
             </p>
             <blockquote>
 	            <pre>
@@ -610,12 +721,10 @@
         <section>
             <h2><code><dfn>set</dfn></code></h2>
             <p>
-                A <a>set</a> updates the values of the <a>variables</a>,
+                A <a>set</a> updates the value of a <a>variable</a>,
                 where the names of the variables and the updated values are specified by evaluating the corresponding expressions.
-                The expression specifying the names of the variables is allowed to contain variables
-                (although static code analysis and possible optimizations would be more difficult),
-                and must evaluate to a string, a list consisting of only strings, or a dictionary consisting of only strings.
-
+                The expression specifying the names of the variables must evaluate to a string, 
+                a list consisting of only strings, or a dictionary consisting of only strings.
             </p>
             <blockquote>
 	            <pre>
@@ -661,9 +770,9 @@
         <section>
             <h2><code><dfn>run</dfn></code></h2>
             <p>
-                A <a>run</a> calls DMPL code in another component, optionally passing in arguments.
+                A <a>run</a> calls DMPL code from another component, optionally passing in arguments.
                 The name of the called component is specified by an expression that must evaluate to a string.
-                The current variables stored in memory are remembered later.
+                The current variables stored in memory are pushed to a stack before the call, and popped back after the call.
             </p>
             <blockquote>
 	            <pre>
@@ -688,7 +797,7 @@
                 A <a>use</a> imports <a>variables</a> and expression operators defined in another component.
                 The name of the imported component is specified by an expression that must evaluate to a string.
                 The variable and expression operator names can be optionally specified, or all variables and expression operators will be imported.
-                It's similar to <code>from os import path</code> notation in Python.
+                It's similar to the Python notation: <code>from os import path</code>.
             </p>
             <blockquote>
 	            <pre>
@@ -707,7 +816,7 @@
         <section>
             <h2><code><dfn>pop</dfn></code></h2>
             <p>
-                A <a>pop</a> quits execution on the current DMPL code, pops the fluent-state from the stack, and resumes execution from the previous <a>run</a> location.
+                A <a>pop</a> quits execution on the current DMPL code, pops the variables from the stack, and resumes execution from the previous <a>run</a> location.
             </p>
             <blockquote>
 	            <pre>
@@ -750,7 +859,7 @@
         <section>
             <h2><code><dfn>fork</dfn></code></h2>
             <p>
-                A <a>fork</a> statement specifies the branch-like behavior of the list of statements that follow.
+                A <a>fork</a> statement specifies a branch in program-execution for the list of statements that follow.
                 Only one is chosen, and the strategy to pick one may be provided using the <a>scheme</a> attribute.
                 By default, a greedy scheme is used, meaning the first statement whose <a>condition</a> is met will be chosen.
                 More complicated schemes, such as depth-first-search or Monte Carlo Tree Search may be indicated,
@@ -881,7 +990,7 @@
         }
     </pre>
     <br />
-    <p>Expressions and variabels may be imported from other files.</p>
+    <p>Expressions and variables may be imported from other files.</p>
     <pre class="example" title="Importing Expressions">
         {
           "@do": [
@@ -1011,7 +1120,7 @@
         <h2>Artificial Intelligence Modelling Language (AIML)</h2>
         <p>
             AIML tightly couples dialogue logic with natural language processing (NLP).
-	    As a result, authoring complicated dialogue systems in AIML requires authors to create an extensive knowledge-base,
+	        As a result, authoring complicated dialogue systems in AIML requires authors to create an extensive knowledge-base,
             requiring a large number of rules that need to be crafted in order to imitate a natural conversation. 
             This often requires domain expertise in order to capture the intricate nuances associated with open-ended dialogue.
             DMPL, on the other hand, is a general representation for dialogue flow and control without text pattern matching rules.
@@ -1019,30 +1128,35 @@
     </section>
     <section>
         <h2>ChatScript</h2>
-	<p>
-	ChatScript incorporates stronger pattern matching than AIML by using NLU to find the best topic 
-	match instead of the best pattern match for an input.
-	To incorporate NLU, ChatScript packages a large database of concepts, which are sets of synonyms.
-	Defining custom concepts is easily accomplished, but requires careful design in order to avoid 
-        being matched with already existing concepts, and to avoid having disjoint inputs being matched with the same concept. 
-	DMPL modularizes the NLU, relieving content-writers from having to write complex pattern matching expressions.
-	</p>
+        <p>
+            ChatScript incorporates stronger pattern matching than AIML by using NLU to find the best topic 
+            match instead of the best pattern match for an input.
+            To incorporate NLU, ChatScript packages a large database of concepts, which are sets of synonyms.
+            Defining custom concepts is easily accomplished, but requires careful design in order to avoid 
+            being matched with already existing concepts, and to avoid having disjoint inputs being matched with the same concept. 
+            DMPL modularizes the NLU, relieving content-writers from having to write complex pattern matching expressions.
+        </p>
     </section>
     <section>
         <h2>RiveScript</h2>
-	<p>
-	 RiveScript mainly concerns itself with fetching a user's input message, and leaving everything else to the content writer. 
-	 It's designed to extend and simplify AIML but still has the overhead of having to write complex
+        <p>
+            RiveScript mainly concerns itself with fetching a user's input message, and leaving everything else to the content writer. 
+            It's designed to extend and simplify AIML but still has the overhead of having to write complex
             pattern matching expressions limiting the variability and scope of the dialogue that can be produced.
             DMPL decouples the need to write complicated pattern matching rules, and instead uses utility functions
             to both drive dialogue and respond to the user's input accordingly.
-	</p>
+        </p>
     </section>
     <section>
         <h2>Planning Domain Definition Language (PDDL)</h2>
         <p>
-            PDDL decouples the action-space (domain description) from the fluent space (problem description), just like
-            DMPL. However, PDDL v3.1 (the latest version as of April 2019) incurs the following limitations:
+            One of the first languages, Planning Domain Definition Language (PDDL) represents tasks by two files: 
+            a domain file, which lists available actions, and a corresponding problem file, 
+            which defines the initial fluents and goal specifications. 
+            Each action defined in the domain file has an entry-condition and a deterministic effect.
+            Deterministic planning is a major limitation, since we’re modeling tasks in interactive or unpredictable environments.
+
+            PDDL v3.1 (the latest version as of April 2019) incurs the following limitations:
         </p>
 
         <ul>
@@ -1055,6 +1169,47 @@
             </li>
         </ul>
     </section>
+    <section>
+        <h2>Probabilistic PDDL (PPDDL)</h2>
+        <p>
+            Probabilistic PDDL (PPDDL) addresses PDDL's limitation by introducing stochastic effects, 
+            so that planning may account for probabilistic outcomes of each action. 
+            The PPDDL inference engine can solve for an action sequence that optimizes a user-defined utility function. 
+            Through some careful organization and design of the domain file, it is also possible, but not intuitive, 
+            to support hierarchical planning within PPDDL. 
+            On the other hand, DMPL is designed with hierarchical planning from the get-go, by pushing fluents to a stack once entering a new subroutine.
+        </p>
+    </section>
+    <section>
+        <h2>Probabilistic Programming</h2>
+        <p>
+            Unlike PPDDL, WebPPL and Stan are general purpose probabilistic programming languages that offer a rich selection of 
+            statistical models and efficient MCMC sampling.  
+            These languages are used to specify general statistical models, which can model an autonomous agent in a stochastic environment. 
+            Since they’re general purpose, like DMPL, WebPPL and Stan support user-defined functions and external interfaces to user-defined business logic.
+        </p>
+    </section>
+    <section>
+        <h2>Decision Theoretic Languages</h2>
+        <p>
+            Languages designed specifically for decision problems include IBAL and Markov logic decision networks (MLDN), 
+            which come with approximate inference solvers. 
+            DTProbLog introduces exact solvers to compute the optimal strategy in a decision-theoretic probabilistic language, 
+            using Algebraic Decision Diagrams (ADD). 
+            However, DTProbLog is less concerned with sequential decision problems. 
+            These languages leverage the Markov Decision Process (MDP) framework, which requires a definition of immediate reward of transitioning from one state to another. 
+            Strategically, DMPL disallows users from defining MDP-like rewards and limits the utility function to be defined indirectly through listing pairs of preferred situations. 
+            Doing so alleviates the guess-work from the user, and reduces buggy code (most common being infinite-loops due to ill-defined rewards).
+        </p>
+        <p>
+            Missing from most probabilistic programming languages is the runtime of the agent. 
+            In other words, once an action-sequence is resolved, instructions for following through with the chosen action on an agent is run elsewhere, 
+            usually defined in a separate codebase. 
+            DMPL borrows ideas from DTGolog, where both the planner (simulation engine) and evaluator (runtime) consult the same user-written abstract syntax tree. 
+            The DMPL code is used both to plan by sampling possible actions and to execute by traversing the same abstract syntax tree.
+        </p>
+    </section>
+
 </section>
 </body>
 </html>
