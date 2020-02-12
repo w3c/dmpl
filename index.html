@@ -768,13 +768,11 @@
                 "@def": ["", "`inc`", "`x`"], "val": {"@pop": ["+", 1, "x"]}
             </pre>
             <pre class="example" title="closure">
-                {
-                  "@def":["","`custom`","`divisor`"], "val":{
+                "@def":["","`custom`","`divisor`"], "val":{
                     "@do":[
                       {"@def":["","`mod`","`num`"], "val": {"@pop":["%","num","divisor"]}},
                       {"@pop":"mod"}
                     ]
-                  }
                 }
             </pre>
         </section>
