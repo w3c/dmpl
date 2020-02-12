@@ -744,6 +744,15 @@
                 These argument names are valid only for this scope, and may shadow global variables.
                 The result is returned by a <a>pop</a> statement.
             </p>
+            <p>
+                Note that when executing a <a>def</a>, a copy of its surrounding state is coupled to the newly defined
+                <a>expression</a> operator.
+            </p>
+            <p>
+                Custom <a>expression</a> operators allows for <dfn><a>Closure</a></dfn> support. In DMPL a
+                <a>Closure</a> is the combination of an <a>expression</a> operator enclosed  with a copy of its
+                surrounding state.
+            </p>
             <blockquote>
 	            <pre>
 	                <a>def</a> ::= '"@def"' ':' <a>expression</a> ',' '"val"' ':' <a>statement</a>
@@ -756,6 +765,38 @@
             <pre class="example" title="def">
                 "@def": ["", "`inc`", "`x`"], "val": {"@pop": ["+", 1, "x"]}
             </pre>
+            <pre class="example" title="closure">
+                "@def": [
+                    "",
+                    "`custom`",
+                    "`divisor`"
+                  ],
+                  "val": {
+                    "@do": [
+                      {
+                        "@def": [
+                          "",
+                          "`mod`",
+                          "`num`"
+                        ],
+                        "val": {
+                          "@do": [
+                            {
+                              "@pop": [
+                                "%",
+                                "num",
+                                "divisor"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "@pop": "mod"
+                      }
+                    ]
+                  }
+            </pre>
         </section>
 
         <section>
@@ -764,6 +805,12 @@
                 A <a>run</a> calls DMPL code from another component, optionally passing in arguments.
                 The name of the called component is specified by an expression that must evaluate to a string.
                 The current variables stored in memory are pushed to a stack before the call, and popped back after the call.
+            </p>
+            <p>
+                The passed in arguments is a JSON array [[RFC7159]] accessible inside the called component, stored in
+                built-in variable named <dfn><a>_args</a></dfn>. Note that <a>_args</a> is <dfn>NULL</dfn> by default if the component
+                is not called by another component. If a component is called with no passed in arguments, <a>_args</a>
+                will be an empty array.
             </p>
             <blockquote>
 	            <pre>
