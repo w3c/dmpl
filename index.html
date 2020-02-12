@@ -745,13 +745,15 @@
                 The result is returned by a <a>pop</a> statement.
             </p>
             <p>
-                Note that when executing a <a>def</a>, a copy of its surrounding state is coupled to the newly defined
-                <a>expression</a> operator.
+                Note that when executing a <a>def</a>, a <i>copy</i> of its surrounding state is coupled to the newly defined
+                <a>expression</a> operator. In contrast, functions in Javascript keep <i>references</i> to the surrounding state instead.
             </p>
             <p>
                 Custom <a>expression</a> operators allows for <dfn><a>Closure</a></dfn> support. In DMPL a
-                <a>Closure</a> is the combination of an <a>expression</a> operator enclosed  with a copy of its
-                surrounding state.
+                <a>Closure</a> is the combination of an <a>expression</a> operator enclosed with a copy of its
+                surrounding state. After an operator is defined, the enclosing scope cannot be modified.
+                When an operator is called, <a>def</a> and <a>set</a> statements inside the body of the operator
+                will only create local symbols that shadow symbols in the enclosing scope.
             </p>
             <blockquote>
 	            <pre>
@@ -766,36 +768,14 @@
                 "@def": ["", "`inc`", "`x`"], "val": {"@pop": ["+", 1, "x"]}
             </pre>
             <pre class="example" title="closure">
-                "@def": [
-                    "",
-                    "`custom`",
-                    "`divisor`"
-                  ],
-                  "val": {
-                    "@do": [
-                      {
-                        "@def": [
-                          "",
-                          "`mod`",
-                          "`num`"
-                        ],
-                        "val": {
-                          "@do": [
-                            {
-                              "@pop": [
-                                "%",
-                                "num",
-                                "divisor"
-                              ]
-                            }
-                          ]
-                        }
-                      },
-                      {
-                        "@pop": "mod"
-                      }
+                {
+                  "@def":["","`custom`","`divisor`"], "val":{
+                    "@do":[
+                      {"@def":["","`mod`","`num`"], "val": {"@pop":["%","num","divisor"]}},
+                      {"@pop":"mod"}
                     ]
                   }
+                }
             </pre>
         </section>
 
