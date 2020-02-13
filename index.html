@@ -744,6 +744,16 @@
                 These argument names are valid only for this scope, and may shadow global variables.
                 The result is returned by a <a>pop</a> statement.
             </p>
+            <p>
+                When running a user-defined operator, a <i>copy</i> of its surrounding environment (e.g. variables/operators) is coupled to the newly defined
+                operator. In contrast, functions in Javascript keep <i>references</i> to the surrounding state.
+            </p>
+            <p>
+                Custom operators support <dfn><a>closure</a></dfn>, since the operator is enclosed with a copy of its
+                surrounding environment. After an operator is defined, the copy of the enclosing scope does not change.
+                When an operator is called, <a>def</a> and <a>set</a> statements inside the body of the operator
+                will only create local symbols that shadow symbols in the enclosing scope.
+            </p>
             <blockquote>
 	            <pre>
 	                <a>def</a> ::= '"@def"' ':' <a>expression</a> ',' '"val"' ':' <a>statement</a>
@@ -756,6 +766,14 @@
             <pre class="example" title="def">
                 "@def": ["", "`inc`", "`x`"], "val": {"@pop": ["+", 1, "x"]}
             </pre>
+            <pre class="example" title="closure">
+                "@def":["","`custom`","`divisor`"], "val":{
+                    "@do":[
+                      {"@def":["","`mod`","`num`"], "val": {"@pop":["%","num","divisor"]}},
+                      {"@pop":"mod"}
+                    ]
+                }
+            </pre>
         </section>
 
         <section>
@@ -764,6 +782,12 @@
                 A <a>run</a> calls DMPL code from another component, optionally passing in arguments.
                 The name of the called component is specified by an expression that must evaluate to a string.
                 The current variables stored in memory are pushed to a stack before the call, and popped back after the call.
+            </p>
+            <p>
+                The passed in arguments is a JSON array [[RFC7159]] accessible inside the called component, stored in a 
+                built-in variable called <dfn><a>_args</a></dfn>. Note that <a>_args</a> is <dfn>null</dfn> by default if the component
+                is not called by another component. If a component is called with no passed in arguments, <a>_args</a>
+                will be an empty array.
             </p>
             <blockquote>
 	            <pre>
