@@ -673,13 +673,34 @@
             </p>
             <blockquote>
 	            <pre>
-	                <a>effect</a> ::= <a>act</a> | <a>set</a> | <a>def</a> | <a>run</a> | <a>use</a> | <a>pop</a>
+	                <a>effect</a> ::= <a>act</a> | <a>set</a> | <a>def</a> | <a>run</a> | <a>use</a> | <a>pop</a> | <a>hop</a>
                 </pre>
             </blockquote>
             <figure id="effect-railroad">
                 <img src="diagrams/effect.png" alt="Effect railroad diagram">
                 <figcaption>Effect</figcaption>
             </figure>
+        </section>
+
+        <section>
+            <h2><code><dfn>hop</dfn></code></h2>
+            <p>
+                A <a>hop</a> statement specifies an ancestry return point from the current node. Recall that DMPL follows a
+                natural tree-like structure, the ancestors mentioned here refer to the parent, grandparent, etc. of the
+                current node.
+            </p>
+            <blockquote>
+                <pre>
+                    <a>hop</a> ::= '"hop"' ':' <a>digit</a>
+                </pre>
+            </blockquote>
+            <figure id="hop-railroad">
+                <img src="diagrams/hop.png" alt="Hop railroad diagram">
+                <figcaption>Hop</figcaption>
+            </figure>
+            <pre class="example" title="hop">
+                "@hop": 3
+            </pre>
         </section>
 
         <section>
@@ -753,6 +774,11 @@
                 surrounding environment. After an operator is defined, the copy of the enclosing scope does not change.
                 When an operator is called, <a>def</a> and <a>set</a> statements inside the body of the operator
                 will only create local symbols that shadow symbols in the enclosing scope.
+            </p>
+            <p>
+                Note that in order to enforce <dfn>pure custom operator's</dfn> in DMPL, statements with
+                side effects such as <a>act</a> and <a>run</a> are not recommended within the body of a user defined
+                custom operator.
             </p>
             <blockquote>
 	            <pre>
